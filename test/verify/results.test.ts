@@ -159,7 +159,7 @@ describe('readRunResults on synthetic directories', () => {
 describe('normaliseErrorMessage', () => {
   it('drops the raw JSON-RPC message appended after the em dash separator', () => {
     const raw =
-      "[implementation] response to 'tools/list' (spec 2026-07-28): JSONRPCErrorResponse/id: must be string,integer — message: {\"jsonrpc\":\"2.0\",\"id\":null}";
+      "[implementation] response to 'tools/list' (spec 2026-07-28): JSONRPCErrorResponse/id: must be string,integer \u2014 message: {\"jsonrpc\":\"2.0\",\"id\":null}";
     expect(normaliseErrorMessage(raw)).toBe(
       "[implementation] response to 'tools/list' (spec 2026-07-28): JSONRPCErrorResponse/id: must be string,integer",
     );

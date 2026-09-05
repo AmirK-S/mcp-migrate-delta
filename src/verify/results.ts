@@ -138,7 +138,8 @@ const HARNESS_PREFIXES = [/^Failed:\s+/, /^JSON-RPC error:\s+/];
 export function normaliseErrorMessage(message: string | undefined): string {
   if (!message) return '(no error message)';
   let text = message;
-  const sep = text.indexOf(' — message:');
+  // The wire validator appends the raw message after an em dash (U+2014) separator.
+  const sep = text.indexOf(' \u2014 message:');
   if (sep !== -1) text = text.slice(0, sep);
   for (const prefix of HARNESS_PREFIXES) text = text.replace(prefix, '');
   return text.trim() || '(no error message)';
