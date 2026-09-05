@@ -1,0 +1,216 @@
+[
+  {
+    "id": "sep-2549-tools-list-caching-hints",
+    "name": "ToolsListCachingHints",
+    "description": "tools/list response includes ttlMs and cacheScope caching hints",
+    "status": "SUCCESS",
+    "timestamp": "2026-09-05T17:49:36.178Z",
+    "specReferences": [
+      {
+        "id": "MCP-Caching",
+        "url": "https://modelcontextprotocol.io/specification/draft/server/utilities/caching"
+      },
+      {
+        "id": "SEP-2549",
+        "url": "https://github.com/modelcontextprotocol/modelcontextprotocol/pull/2549"
+      }
+    ],
+    "details": {
+      "ttlMs": 0,
+      "cacheScope": "private",
+      "hasTtlMs": true,
+      "hasCacheScope": true
+    }
+  },
+  {
+    "id": "sep-2549-prompts-list-caching-hints",
+    "name": "PromptsListCachingHints",
+    "description": "prompts/list response includes ttlMs and cacheScope caching hints",
+    "status": "SUCCESS",
+    "timestamp": "2026-09-05T17:49:36.179Z",
+    "specReferences": [
+      {
+        "id": "MCP-Caching",
+        "url": "https://modelcontextprotocol.io/specification/draft/server/utilities/caching"
+      },
+      {
+        "id": "SEP-2549",
+        "url": "https://github.com/modelcontextprotocol/modelcontextprotocol/pull/2549"
+      }
+    ],
+    "details": {
+      "ttlMs": 0,
+      "cacheScope": "private",
+      "hasTtlMs": true,
+      "hasCacheScope": true
+    }
+  },
+  {
+    "id": "sep-2549-resources-list-caching-hints",
+    "name": "ResourcesListCachingHints",
+    "description": "resources/list response includes ttlMs and cacheScope caching hints",
+    "status": "SUCCESS",
+    "timestamp": "2026-09-05T17:49:36.181Z",
+    "specReferences": [
+      {
+        "id": "MCP-Caching",
+        "url": "https://modelcontextprotocol.io/specification/draft/server/utilities/caching"
+      },
+      {
+        "id": "SEP-2549",
+        "url": "https://github.com/modelcontextprotocol/modelcontextprotocol/pull/2549"
+      }
+    ],
+    "details": {
+      "ttlMs": 0,
+      "cacheScope": "private",
+      "hasTtlMs": true,
+      "hasCacheScope": true
+    }
+  },
+  {
+    "id": "sep-2549-resources-templates-list-caching-hints",
+    "name": "ResourcesTemplatesListCachingHints",
+    "description": "resources/templates/list response includes ttlMs and cacheScope caching hints",
+    "status": "SUCCESS",
+    "timestamp": "2026-09-05T17:49:36.185Z",
+    "specReferences": [
+      {
+        "id": "MCP-Caching",
+        "url": "https://modelcontextprotocol.io/specification/draft/server/utilities/caching"
+      },
+      {
+        "id": "SEP-2549",
+        "url": "https://github.com/modelcontextprotocol/modelcontextprotocol/pull/2549"
+      }
+    ],
+    "details": {
+      "ttlMs": 0,
+      "cacheScope": "private",
+      "hasTtlMs": true,
+      "hasCacheScope": true
+    }
+  },
+  {
+    "id": "sep-2549-resources-read-caching-hints",
+    "name": "ResourcesReadCachingHints",
+    "description": "resources/read response includes ttlMs and cacheScope caching hints",
+    "status": "SUCCESS",
+    "timestamp": "2026-09-05T17:49:36.188Z",
+    "specReferences": [
+      {
+        "id": "MCP-Caching",
+        "url": "https://modelcontextprotocol.io/specification/draft/server/utilities/caching"
+      },
+      {
+        "id": "SEP-2549",
+        "url": "https://github.com/modelcontextprotocol/modelcontextprotocol/pull/2549"
+      }
+    ],
+    "details": {
+      "ttlMs": 0,
+      "cacheScope": "private",
+      "hasTtlMs": true,
+      "hasCacheScope": true
+    }
+  },
+  {
+    "id": "sep-2549-ttl-non-negative",
+    "name": "TtlNonNegative",
+    "description": "All ttlMs values are non-negative integers",
+    "status": "SUCCESS",
+    "timestamp": "2026-09-05T17:49:36.188Z",
+    "specReferences": [
+      {
+        "id": "MCP-Caching",
+        "url": "https://modelcontextprotocol.io/specification/draft/server/utilities/caching"
+      },
+      {
+        "id": "SEP-2549",
+        "url": "https://github.com/modelcontextprotocol/modelcontextprotocol/pull/2549"
+      }
+    ],
+    "details": {
+      "endpoints": [
+        {
+          "endpoint": "tools/list",
+          "ttlMs": 0
+        },
+        {
+          "endpoint": "prompts/list",
+          "ttlMs": 0
+        },
+        {
+          "endpoint": "resources/list",
+          "ttlMs": 0
+        },
+        {
+          "endpoint": "resources/templates/list",
+          "ttlMs": 0
+        },
+        {
+          "endpoint": "resources/read",
+          "ttlMs": 0
+        }
+      ]
+    }
+  },
+  {
+    "id": "sep-2549-cache-scope-valid",
+    "name": "CacheScopeValid",
+    "description": "All cacheScope values are \"public\" or \"private\"",
+    "status": "SUCCESS",
+    "timestamp": "2026-09-05T17:49:36.188Z",
+    "specReferences": [
+      {
+        "id": "MCP-Caching",
+        "url": "https://modelcontextprotocol.io/specification/draft/server/utilities/caching"
+      },
+      {
+        "id": "SEP-2549",
+        "url": "https://github.com/modelcontextprotocol/modelcontextprotocol/pull/2549"
+      }
+    ],
+    "details": {
+      "endpoints": [
+        {
+          "endpoint": "tools/list",
+          "cacheScope": "private"
+        },
+        {
+          "endpoint": "prompts/list",
+          "cacheScope": "private"
+        },
+        {
+          "endpoint": "resources/list",
+          "cacheScope": "private"
+        },
+        {
+          "endpoint": "resources/templates/list",
+          "cacheScope": "private"
+        },
+        {
+          "endpoint": "resources/read",
+          "cacheScope": "private"
+        }
+      ]
+    }
+  },
+  {
+    "id": "wire-schema-valid",
+    "name": "WireSchemaValid",
+    "description": "Every JSON-RPC message the implementation sent is valid per the spec JSON schema for the negotiated spec version",
+    "status": "SUCCESS",
+    "timestamp": "2026-09-05T17:49:36.188Z",
+    "specReferences": [
+      {
+        "id": "MCP-Schema",
+        "url": "https://github.com/modelcontextprotocol/modelcontextprotocol/blob/main/schema/draft/schema.json"
+      }
+    ],
+    "details": {
+      "messagesValidated": 10,
+      "violations": []
+    }
+  }
+]

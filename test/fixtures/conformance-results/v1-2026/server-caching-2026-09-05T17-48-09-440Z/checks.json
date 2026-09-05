@@ -1,0 +1,241 @@
+[
+  {
+    "id": "sep-2549-tools-list-caching-hints",
+    "name": "ToolsListCachingHints",
+    "description": "tools/list response includes ttlMs and cacheScope caching hints",
+    "status": "FAILURE",
+    "timestamp": "2026-09-05T17:48:09.443Z",
+    "errorMessage": "tools/list returned JSON-RPC error -32000: Bad Request: Server not initialized",
+    "specReferences": [
+      {
+        "id": "MCP-Caching",
+        "url": "https://modelcontextprotocol.io/specification/draft/server/utilities/caching"
+      },
+      {
+        "id": "SEP-2549",
+        "url": "https://github.com/modelcontextprotocol/modelcontextprotocol/pull/2549"
+      }
+    ],
+    "details": {
+      "error": {
+        "code": -32000,
+        "message": "Bad Request: Server not initialized"
+      }
+    }
+  },
+  {
+    "id": "sep-2549-prompts-list-caching-hints",
+    "name": "PromptsListCachingHints",
+    "description": "prompts/list response includes ttlMs and cacheScope caching hints",
+    "status": "FAILURE",
+    "timestamp": "2026-09-05T17:48:09.445Z",
+    "errorMessage": "prompts/list returned JSON-RPC error -32000: Bad Request: Server not initialized",
+    "specReferences": [
+      {
+        "id": "MCP-Caching",
+        "url": "https://modelcontextprotocol.io/specification/draft/server/utilities/caching"
+      },
+      {
+        "id": "SEP-2549",
+        "url": "https://github.com/modelcontextprotocol/modelcontextprotocol/pull/2549"
+      }
+    ],
+    "details": {
+      "error": {
+        "code": -32000,
+        "message": "Bad Request: Server not initialized"
+      }
+    }
+  },
+  {
+    "id": "sep-2549-resources-list-caching-hints",
+    "name": "ResourcesListCachingHints",
+    "description": "resources/list response includes ttlMs and cacheScope caching hints",
+    "status": "FAILURE",
+    "timestamp": "2026-09-05T17:48:09.446Z",
+    "errorMessage": "resources/list returned JSON-RPC error -32000: Bad Request: Server not initialized",
+    "specReferences": [
+      {
+        "id": "MCP-Caching",
+        "url": "https://modelcontextprotocol.io/specification/draft/server/utilities/caching"
+      },
+      {
+        "id": "SEP-2549",
+        "url": "https://github.com/modelcontextprotocol/modelcontextprotocol/pull/2549"
+      }
+    ],
+    "details": {
+      "error": {
+        "code": -32000,
+        "message": "Bad Request: Server not initialized"
+      }
+    }
+  },
+  {
+    "id": "sep-2549-resources-templates-list-caching-hints",
+    "name": "ResourcesTemplatesListCachingHints",
+    "description": "resources/templates/list response includes ttlMs and cacheScope caching hints",
+    "status": "FAILURE",
+    "timestamp": "2026-09-05T17:48:09.449Z",
+    "errorMessage": "resources/templates/list returned JSON-RPC error -32000: Bad Request: Server not initialized",
+    "specReferences": [
+      {
+        "id": "MCP-Caching",
+        "url": "https://modelcontextprotocol.io/specification/draft/server/utilities/caching"
+      },
+      {
+        "id": "SEP-2549",
+        "url": "https://github.com/modelcontextprotocol/modelcontextprotocol/pull/2549"
+      }
+    ],
+    "details": {
+      "error": {
+        "code": -32000,
+        "message": "Bad Request: Server not initialized"
+      }
+    }
+  },
+  {
+    "id": "sep-2549-resources-read-caching-hints",
+    "name": "ResourcesReadCachingHints",
+    "description": "resources/read response includes ttlMs and cacheScope caching hints",
+    "status": "SKIPPED",
+    "timestamp": "2026-09-05T17:48:09.449Z",
+    "errorMessage": "resources/read was not exercised: resources/list failed or returned no resources.",
+    "specReferences": [
+      {
+        "id": "MCP-Caching",
+        "url": "https://modelcontextprotocol.io/specification/draft/server/utilities/caching"
+      },
+      {
+        "id": "SEP-2549",
+        "url": "https://github.com/modelcontextprotocol/modelcontextprotocol/pull/2549"
+      }
+    ]
+  },
+  {
+    "id": "sep-2549-ttl-non-negative",
+    "name": "TtlNonNegative",
+    "description": "All ttlMs values are non-negative integers",
+    "status": "FAILURE",
+    "timestamp": "2026-09-05T17:48:09.449Z",
+    "errorMessage": "no endpoints returned ttlMs",
+    "specReferences": [
+      {
+        "id": "MCP-Caching",
+        "url": "https://modelcontextprotocol.io/specification/draft/server/utilities/caching"
+      },
+      {
+        "id": "SEP-2549",
+        "url": "https://github.com/modelcontextprotocol/modelcontextprotocol/pull/2549"
+      }
+    ],
+    "details": {
+      "endpoints": []
+    }
+  },
+  {
+    "id": "sep-2549-cache-scope-valid",
+    "name": "CacheScopeValid",
+    "description": "All cacheScope values are \"public\" or \"private\"",
+    "status": "FAILURE",
+    "timestamp": "2026-09-05T17:48:09.449Z",
+    "errorMessage": "no endpoints returned cacheScope",
+    "specReferences": [
+      {
+        "id": "MCP-Caching",
+        "url": "https://modelcontextprotocol.io/specification/draft/server/utilities/caching"
+      },
+      {
+        "id": "SEP-2549",
+        "url": "https://github.com/modelcontextprotocol/modelcontextprotocol/pull/2549"
+      }
+    ],
+    "details": {
+      "endpoints": []
+    }
+  },
+  {
+    "id": "wire-schema-valid",
+    "name": "WireSchemaValid",
+    "description": "Every JSON-RPC message the implementation sent is valid per the spec JSON schema for the negotiated spec version",
+    "status": "FAILURE",
+    "timestamp": "2026-09-05T17:48:09.449Z",
+    "specReferences": [
+      {
+        "id": "MCP-Schema",
+        "url": "https://github.com/modelcontextprotocol/modelcontextprotocol/blob/main/schema/draft/schema.json"
+      }
+    ],
+    "details": {
+      "messagesValidated": 8,
+      "violations": [
+        {
+          "origin": "implementation",
+          "specVersion": "2026-07-28",
+          "context": "response to 'tools/list'",
+          "errors": [
+            "JSONRPCErrorResponse/id: must be string,integer"
+          ],
+          "message": {
+            "jsonrpc": "2.0",
+            "error": {
+              "code": -32000,
+              "message": "Bad Request: Server not initialized"
+            },
+            "id": null
+          }
+        },
+        {
+          "origin": "implementation",
+          "specVersion": "2026-07-28",
+          "context": "response to 'prompts/list'",
+          "errors": [
+            "JSONRPCErrorResponse/id: must be string,integer"
+          ],
+          "message": {
+            "jsonrpc": "2.0",
+            "error": {
+              "code": -32000,
+              "message": "Bad Request: Server not initialized"
+            },
+            "id": null
+          }
+        },
+        {
+          "origin": "implementation",
+          "specVersion": "2026-07-28",
+          "context": "response to 'resources/list'",
+          "errors": [
+            "JSONRPCErrorResponse/id: must be string,integer"
+          ],
+          "message": {
+            "jsonrpc": "2.0",
+            "error": {
+              "code": -32000,
+              "message": "Bad Request: Server not initialized"
+            },
+            "id": null
+          }
+        },
+        {
+          "origin": "implementation",
+          "specVersion": "2026-07-28",
+          "context": "response to 'resources/templates/list'",
+          "errors": [
+            "JSONRPCErrorResponse/id: must be string,integer"
+          ],
+          "message": {
+            "jsonrpc": "2.0",
+            "error": {
+              "code": -32000,
+              "message": "Bad Request: Server not initialized"
+            },
+            "id": null
+          }
+        }
+      ]
+    },
+    "errorMessage": "[implementation] response to 'tools/list' (spec 2026-07-28): JSONRPCErrorResponse/id: must be string,integer — message: {\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32000,\"message\":\"Bad Request: Server not initialized\"},\"id\":null}\n[implementation] response to 'prompts/list' (spec 2026-07-28): JSONRPCErrorResponse/id: must be string,integer — message: {\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32000,\"message\":\"Bad Request: Server not initialized\"},\"id\":null}\n[implementation] response to 'resources/list' (spec 2026-07-28): JSONRPCErrorResponse/id: must be string,integer — message: {\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32000,\"message\":\"Bad Request: Server not initialized\"},\"id\":null}\n[implementation] response to 'resources/templates/list' (spec 2026-07-28): JSONRPCErrorResponse/id: must be string,integer — message: {\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32000,\"message\":\"Bad Request: Server not initialized\"},\"id\":null}"
+  }
+]

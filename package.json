@@ -1,0 +1,49 @@
+{
+  "name": "mcp-migrate-delta",
+  "version": "0.1.0",
+  "description": "Measure what MCP revision 2026-07-28 breaks in a 2025-11-25 TypeScript server, and prove the migration with the official conformance suite before and after.",
+  "keywords": ["mcp", "model-context-protocol", "migration", "conformance", "2026-07-28", "2025-11-25"],
+  "license": "Apache-2.0",
+  "author": "Amir Kellou-Sidhoum",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AmirK-S/mcp-migrate-delta.git"
+  },
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "bin": {
+    "mcp-migrate-delta": "dist/cli.js"
+  },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": ["dist", "README.md", "LICENSE", "NOTICE", "CHANGELOG.md"],
+  "workspaces": ["fixtures/before", "fixtures/after"],
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run --exclude 'test/network/**'",
+    "test:network": "vitest run test/network",
+    "test:all": "vitest run",
+    "prepublishOnly": "npm run typecheck && npm run build && npm test"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/conformance": "0.2.0-alpha.11",
+    "commander": "15.0.0",
+    "ts-morph": "28.0.0",
+    "yaml": "2.9.0"
+  },
+  "devDependencies": {
+    "@types/node": "22.20.1",
+    "tsx": "4.23.13",
+    "typescript": "5.9.3",
+    "vitest": "5.0.0"
+  }
+}

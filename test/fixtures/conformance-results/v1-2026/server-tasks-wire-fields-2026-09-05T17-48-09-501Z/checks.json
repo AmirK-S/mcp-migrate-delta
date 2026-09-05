@@ -1,0 +1,99 @@
+[
+  {
+    "id": "tasks-wire-field-renames",
+    "name": "TasksWireFieldRenames",
+    "description": "CreateTaskResult uses ttlMs + pollIntervalMs (integer milliseconds); legacy ttl / pollInterval keys absent",
+    "status": "FAILURE",
+    "timestamp": "2026-09-05T17:48:09.503Z",
+    "errorMessage": "Bad Request: Server not initialized",
+    "specReferences": [
+      {
+        "id": "SEP-2663",
+        "url": "https://modelcontextprotocol.io/seps/2663-tasks-extension"
+      }
+    ]
+  },
+  {
+    "id": "tasks-no-early-ttl-expiry",
+    "name": "TasksNoEarlyTtlExpiry",
+    "description": "Task remains accessible via tasks/get for the duration of its ttlMs",
+    "status": "FAILURE",
+    "timestamp": "2026-09-05T17:48:09.503Z",
+    "errorMessage": "Not testable: no task was created by the preceding step, so this check could not be exercised",
+    "specReferences": [
+      {
+        "id": "SEP-2663",
+        "url": "https://modelcontextprotocol.io/seps/2663-tasks-extension"
+      }
+    ],
+    "details": {
+      "untestable": true,
+      "reason": "no task was created by the preceding step, so this check could not be exercised"
+    }
+  },
+  {
+    "id": "tasks-no-related-task-meta-on-inlined-result",
+    "name": "TasksNoRelatedTaskMetaOnInlinedResult",
+    "description": "tasks/get inlined result MUST NOT include the v1 io.modelcontextprotocol/related-task _meta key (taskId is at the root)",
+    "status": "FAILURE",
+    "timestamp": "2026-09-05T17:48:09.505Z",
+    "errorMessage": "Bad Request: Server not initialized",
+    "specReferences": [
+      {
+        "id": "SEP-2663",
+        "url": "https://modelcontextprotocol.io/seps/2663-tasks-extension"
+      }
+    ]
+  },
+  {
+    "id": "wire-schema-valid",
+    "name": "WireSchemaValid",
+    "description": "Every JSON-RPC message the implementation sent is valid per the spec JSON schema for the negotiated spec version",
+    "status": "FAILURE",
+    "timestamp": "2026-09-05T17:48:09.505Z",
+    "specReferences": [
+      {
+        "id": "MCP-Schema",
+        "url": "https://github.com/modelcontextprotocol/modelcontextprotocol/blob/main/schema/draft/schema.json"
+      }
+    ],
+    "details": {
+      "messagesValidated": 4,
+      "violations": [
+        {
+          "origin": "implementation",
+          "specVersion": "2026-07-28",
+          "context": "response to 'tools/call'",
+          "errors": [
+            "JSONRPCErrorResponse/id: must be string,integer"
+          ],
+          "message": {
+            "jsonrpc": "2.0",
+            "error": {
+              "code": -32000,
+              "message": "Bad Request: Server not initialized"
+            },
+            "id": null
+          }
+        },
+        {
+          "origin": "implementation",
+          "specVersion": "2026-07-28",
+          "context": "response to 'tools/call'",
+          "errors": [
+            "JSONRPCErrorResponse/id: must be string,integer"
+          ],
+          "message": {
+            "jsonrpc": "2.0",
+            "error": {
+              "code": -32000,
+              "message": "Bad Request: Server not initialized"
+            },
+            "id": null
+          }
+        }
+      ]
+    },
+    "errorMessage": "[implementation] response to 'tools/call' (spec 2026-07-28): JSONRPCErrorResponse/id: must be string,integer — message: {\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32000,\"message\":\"Bad Request: Server not initialized\"},\"id\":null}\n[implementation] response to 'tools/call' (spec 2026-07-28): JSONRPCErrorResponse/id: must be string,integer — message: {\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32000,\"message\":\"Bad Request: Server not initialized\"},\"id\":null}"
+  }
+]

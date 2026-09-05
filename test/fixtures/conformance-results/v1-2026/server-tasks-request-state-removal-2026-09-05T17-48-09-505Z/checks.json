@@ -1,0 +1,51 @@
+[
+  {
+    "id": "tasks-request-state-removal-setup",
+    "name": "TasksRequestStateRemovalSetup",
+    "description": "Failed to create a long-running task to exercise the absence-asserts",
+    "status": "FAILURE",
+    "timestamp": "2026-09-05T17:48:09.507Z",
+    "errorMessage": "Bad Request: Server not initialized",
+    "specReferences": [
+      {
+        "id": "SEP-2663",
+        "url": "https://modelcontextprotocol.io/seps/2663-tasks-extension"
+      }
+    ]
+  },
+  {
+    "id": "wire-schema-valid",
+    "name": "WireSchemaValid",
+    "description": "Every JSON-RPC message the implementation sent is valid per the spec JSON schema for the negotiated spec version",
+    "status": "FAILURE",
+    "timestamp": "2026-09-05T17:48:09.507Z",
+    "specReferences": [
+      {
+        "id": "MCP-Schema",
+        "url": "https://github.com/modelcontextprotocol/modelcontextprotocol/blob/main/schema/draft/schema.json"
+      }
+    ],
+    "details": {
+      "messagesValidated": 2,
+      "violations": [
+        {
+          "origin": "implementation",
+          "specVersion": "2026-07-28",
+          "context": "response to 'tools/call'",
+          "errors": [
+            "JSONRPCErrorResponse/id: must be string,integer"
+          ],
+          "message": {
+            "jsonrpc": "2.0",
+            "error": {
+              "code": -32000,
+              "message": "Bad Request: Server not initialized"
+            },
+            "id": null
+          }
+        }
+      ]
+    },
+    "errorMessage": "[implementation] response to 'tools/call' (spec 2026-07-28): JSONRPCErrorResponse/id: must be string,integer — message: {\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32000,\"message\":\"Bad Request: Server not initialized\"},\"id\":null}"
+  }
+]

@@ -1,0 +1,15 @@
+{
+  "name": "@mcp-migrate-delta/fixture-after",
+  "version": "0.0.0",
+  "private": true,
+  "description": "The same server migrated by hand to revision 2026-07-28 on @modelcontextprotocol/server 2.x. Used as the after side of the conformance delta.",
+  "type": "module",
+  "scripts": {
+    "start": "node src/server.mjs"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/node": "2.0.0",
+    "@modelcontextprotocol/server": "2.0.0",
+    "zod": "4.5.4"
+  }
+}

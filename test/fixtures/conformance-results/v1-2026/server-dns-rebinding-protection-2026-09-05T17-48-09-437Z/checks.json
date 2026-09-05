@@ -1,0 +1,63 @@
+[
+  {
+    "id": "localhost-host-rebinding-rejected",
+    "name": "DNSRebindingRejected",
+    "description": "Server rejects requests with non-localhost Host/Origin headers",
+    "timestamp": "2026-09-05T17:48:09.437Z",
+    "specReferences": [
+      {
+        "id": "MCP-DNS-Rebinding-Protection",
+        "url": "https://modelcontextprotocol.io/specification/2025-11-25/basic/security_best_practices#local-mcp-server-compromise"
+      },
+      {
+        "id": "MCP-Transport-Security",
+        "url": "https://modelcontextprotocol.io/specification/2025-11-25/basic/transports#security-warning"
+      }
+    ],
+    "status": "SUCCESS",
+    "details": {
+      "hostHeader": "evil.example.com",
+      "originHeader": "http://evil.example.com",
+      "statusCode": 403,
+      "body": {
+        "jsonrpc": "2.0",
+        "error": {
+          "code": -32000,
+          "message": "Invalid Host header: evil.example.com"
+        },
+        "id": null
+      }
+    }
+  },
+  {
+    "id": "localhost-host-valid-accepted",
+    "name": "LocalhostHostAccepted",
+    "description": "Server accepts requests with valid localhost Host/Origin headers",
+    "timestamp": "2026-09-05T17:48:09.437Z",
+    "specReferences": [
+      {
+        "id": "MCP-DNS-Rebinding-Protection",
+        "url": "https://modelcontextprotocol.io/specification/2025-11-25/basic/security_best_practices#local-mcp-server-compromise"
+      },
+      {
+        "id": "MCP-Transport-Security",
+        "url": "https://modelcontextprotocol.io/specification/2025-11-25/basic/transports#security-warning"
+      }
+    ],
+    "status": "FAILURE",
+    "errorMessage": "Expected HTTP 2xx for valid localhost Host/Origin headers, got 400",
+    "details": {
+      "hostHeader": "localhost:39011",
+      "originHeader": "http://localhost:39011",
+      "statusCode": 400,
+      "body": {
+        "jsonrpc": "2.0",
+        "error": {
+          "code": -32000,
+          "message": "Bad Request: Server not initialized"
+        },
+        "id": null
+      }
+    }
+  }
+]

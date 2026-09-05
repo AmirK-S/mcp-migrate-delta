@@ -1,0 +1,119 @@
+[
+  {
+    "id": "sep-2663-tasks-get-status-input-required",
+    "name": "TasksMRTRInputRequestsOnTasksGet",
+    "description": "tasks/get on an input_required task MUST surface a non-empty inputRequests map",
+    "status": "FAILURE",
+    "timestamp": "2026-09-05T17:48:09.510Z",
+    "errorMessage": "Bad Request: Server not initialized",
+    "specReferences": [
+      {
+        "id": "SEP-2322",
+        "url": "https://modelcontextprotocol.io/specification/draft/basic/utilities/mrtr"
+      }
+    ]
+  },
+  {
+    "id": "tasks-mrtr-tasks-update-resumes",
+    "name": "TasksMRTRTasksUpdateResumes",
+    "description": "tasks/update with matching inputResponses MUST be acked with {resultType:\"complete\"} and resume the task to a terminal state",
+    "status": "FAILURE",
+    "timestamp": "2026-09-05T17:48:09.512Z",
+    "errorMessage": "Bad Request: Server not initialized",
+    "specReferences": [
+      {
+        "id": "SEP-2322",
+        "url": "https://modelcontextprotocol.io/specification/draft/basic/utilities/mrtr"
+      },
+      {
+        "id": "SEP-2663",
+        "url": "https://modelcontextprotocol.io/seps/2663-tasks-extension"
+      }
+    ]
+  },
+  {
+    "id": "tasks-mrtr-partial-fulfillment",
+    "name": "TasksMRTRPartialFulfillment",
+    "description": "tasks/update with a subset of keys MUST keep the task in input_required with only the unanswered key remaining",
+    "status": "FAILURE",
+    "timestamp": "2026-09-05T17:48:09.514Z",
+    "errorMessage": "Bad Request: Server not initialized",
+    "specReferences": [
+      {
+        "id": "SEP-2322",
+        "url": "https://modelcontextprotocol.io/specification/draft/basic/utilities/mrtr"
+      },
+      {
+        "id": "SEP-2663",
+        "url": "https://modelcontextprotocol.io/seps/2663-tasks-extension"
+      }
+    ]
+  },
+  {
+    "id": "wire-schema-valid",
+    "name": "WireSchemaValid",
+    "description": "Every JSON-RPC message the implementation sent is valid per the spec JSON schema for the negotiated spec version",
+    "status": "FAILURE",
+    "timestamp": "2026-09-05T17:48:09.514Z",
+    "specReferences": [
+      {
+        "id": "MCP-Schema",
+        "url": "https://github.com/modelcontextprotocol/modelcontextprotocol/blob/main/schema/draft/schema.json"
+      }
+    ],
+    "details": {
+      "messagesValidated": 6,
+      "violations": [
+        {
+          "origin": "implementation",
+          "specVersion": "2026-07-28",
+          "context": "response to 'tools/call'",
+          "errors": [
+            "JSONRPCErrorResponse/id: must be string,integer"
+          ],
+          "message": {
+            "jsonrpc": "2.0",
+            "error": {
+              "code": -32000,
+              "message": "Bad Request: Server not initialized"
+            },
+            "id": null
+          }
+        },
+        {
+          "origin": "implementation",
+          "specVersion": "2026-07-28",
+          "context": "response to 'tools/call'",
+          "errors": [
+            "JSONRPCErrorResponse/id: must be string,integer"
+          ],
+          "message": {
+            "jsonrpc": "2.0",
+            "error": {
+              "code": -32000,
+              "message": "Bad Request: Server not initialized"
+            },
+            "id": null
+          }
+        },
+        {
+          "origin": "implementation",
+          "specVersion": "2026-07-28",
+          "context": "response to 'tools/call'",
+          "errors": [
+            "JSONRPCErrorResponse/id: must be string,integer"
+          ],
+          "message": {
+            "jsonrpc": "2.0",
+            "error": {
+              "code": -32000,
+              "message": "Bad Request: Server not initialized"
+            },
+            "id": null
+          }
+        }
+      ]
+    },
+    "errorMessage": "[implementation] response to 'tools/call' (spec 2026-07-28): JSONRPCErrorResponse/id: must be string,integer — message: {\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32000,\"message\":\"Bad Request: Server not initialized\"},\"id\":null}\n[implementation] response to 'tools/call' (spec 2026-07-28): JSONRPCErrorResponse/id: must be string,integer — message: {\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32000,\"message\":\"Bad Request: Server not initialized\"},\"id\":null}\n[implementation] response to 'tools/call' (spec 2026-07-28): JSONRPCErrorResponse/id: must be string,integer — message: {\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32000,\"message\":\"Bad Request: Server not initialized\"},\"id\":null}"
+  }
+]
