@@ -1,3 +1,4 @@
+import { relative } from 'node:path';
 import type { DeltaReport, Finding, RunReport, ScanReport } from './report.js';
 import type { Rule } from './rules/types.js';
 
@@ -5,7 +6,7 @@ const MAX_ROOT_CAUSES = 8;
 
 export function formatScan(report: ScanReport): string {
   const lines: string[] = [];
-  lines.push(`${report.tool.name} ${report.tool.version} scan of ${report.target.path}`);
+  lines.push(`${report.tool.name} ${report.tool.version} scan of ${displayPath(report.target.path)}`);
   lines.push(`Revision 2025-11-25 to 2026-07-28, ${report.target.files} file(s), ${report.summary.rules.length} rule(s)`);
   lines.push('');
   if (report.findings.length === 0) {
@@ -26,6 +27,12 @@ export function formatScan(report: ScanReport): string {
   const safeFixes = report.findings.filter((f) => f.fix?.confidence === 'safe').length;
   if (safeFixes > 0) lines.push(`${safeFixes} finding(s) have a safe mechanical replacement, shown inline.`);
   return lines.join('\n');
+}
+
+/** The scanned path relative to the working directory when it lies beneath it, else as given. */
+function displayPath(path: string): string {
+  const rel = relative(process.cwd(), path);
+  return rel === '' ? '.' : rel.startsWith('..') ? path : rel;
 }
 
 function formatFinding(f: Finding): string {
@@ -106,6 +113,7 @@ export function formatRules(rules: readonly Rule[]): string {
     lines.push(`${r.id}  ${r.severity}  [${r.section}]`);
     lines.push(`  ${r.title}`);
     lines.push(`  ${r.description}`);
+    lines.push(`  Fix: ${r.remediation}`);
     lines.push('');
   }
   return lines.join('\n').trimEnd();

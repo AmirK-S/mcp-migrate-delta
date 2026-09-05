@@ -181,11 +181,9 @@ describe('normaliseErrorMessage', () => {
 describe('groupRootCauses', () => {
   it('orders causes by number of failing checks, then by name', () => {
     const causes = groupRootCauses([
-      { id: 's1', scored: true, outcome: 'fail', checks: [{ id: 'a', status: 'FAILURE', errorMessage: 'Failed: X' }] },
+      { id: 's1', checks: [{ id: 'a', status: 'FAILURE', errorMessage: 'Failed: X' }] },
       {
         id: 's2',
-        scored: true,
-        outcome: 'fail',
         checks: [
           { id: 'a', status: 'FAILURE', errorMessage: 'X' },
           { id: 'b', status: 'FAILURE', errorMessage: 'Y' },

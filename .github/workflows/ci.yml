@@ -12,6 +12,7 @@ jobs:
   offline:
     name: Typecheck, build and offline tests
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     strategy:
       matrix:
         node: [22, 24]
@@ -29,6 +30,7 @@ jobs:
   network:
     name: Real conformance delta on the bundled fixtures
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     needs: offline
     steps:
       - uses: actions/checkout@v4

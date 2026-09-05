@@ -21,7 +21,8 @@ export const errorCodes: Rule = {
   title: 'Resource not found error code changed from -32002 to -32602',
   description:
     'Revision 2026-07-28 changes the resource not found error code from -32002 to -32602 to align with JSON-RPC Invalid Params. The conformance scenario sep-2164-resource-not-found checks the new code.',
-  remediation: 'Replace -32002 with -32602. The SDK constant is ResourceNotFound in 2.x.',
+  remediation:
+    'Replace -32002 with -32602. In @modelcontextprotocol/server 2.x, throw ResourceNotFoundError, which carries -32602 and echoes the requested uri in data; the ProtocolErrorCode.ResourceNotFound member is still -32002 and is receive-tolerated only, never emitted.',
   checkSource(file: SourceFile): RuleMatch[] {
     const matches: RuleMatch[] = [];
     for (const expr of negativeNumericLiterals(file, RESOURCE_NOT_FOUND_OLD)) {

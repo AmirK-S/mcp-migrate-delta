@@ -76,7 +76,16 @@ describe('mcp-migrate-delta scan', () => {
   it('exits 2 with a message on a path that does not exist', async () => {
     const r = await cli(['scan', '/nonexistent/path/for/mcp-migrate-delta']);
     expect(r.code).toBe(2);
-    expect(r.stderr).toMatch(/ENOENT|no such file/);
+    expect(r.stderr).toMatch(/Cannot read/);
+  });
+
+  it('exits 2 on a usage error, never 1, so a typo cannot read as a finding', async () => {
+    expect((await cli(['scan', '--jsno', '.'])).code).toBe(2);
+    expect((await cli(['verify'])).code).toBe(2);
+    expect((await cli(['verify', '--url', 'http://127.0.0.1:1/mcp', '--timeout', 'abc'])).code).toBe(2);
+    expect((await cli(['nonexistent-command'])).code).toBe(2);
+    expect((await cli(['--help'])).code).toBe(0);
+    expect((await cli(['--version'])).code).toBe(0);
   });
 });
 

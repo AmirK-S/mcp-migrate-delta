@@ -13,6 +13,12 @@ import { TOOL_VERSION } from './version.js';
 const DEFAULT_REVISION = '2026-07-28';
 
 const program = new Command();
+// Usage errors exit 2, never 1: exit 1 is reserved for findings and regressions so that a
+// typo in a flag can never read as a conformance failure in CI.
+program.exitOverride((err) => {
+  if (err.code === 'commander.helpDisplayed' || err.code === 'commander.version' || err.code === 'commander.help') process.exit(0);
+  process.exit(2);
+});
 program
   .name('mcp-migrate-delta')
   .description('Measure what MCP revision 2026-07-28 breaks in a 2025-11-25 TypeScript server, and prove the migration with the official conformance suite before and after.')
@@ -25,7 +31,12 @@ program
   .option('--json', 'print the JSON report instead of text')
   .option('--report <file>', 'also write the JSON report to this file')
   .action((path: string, opts: { json?: boolean; report?: string }) => {
-    const target = createProjectFromDirectory(path);
+    let target;
+    try {
+      target = createProjectFromDirectory(path);
+    } catch {
+      throw new Error(`Cannot read ${path}: pass a directory or a single TypeScript, JavaScript or package.json file.`);
+    }
     const report = scanProject(target, target.root);
     if (opts.report) writeFileSync(opts.report, JSON.stringify(report, null, 2) + '\n');
     process.stdout.write((opts.json ? JSON.stringify(report, null, 2) : formatScan(report)) + '\n');
@@ -44,6 +55,8 @@ program
   .option('--json', 'print the JSON report instead of text')
   .action(async (opts: { url: string; requirements: string; baseline?: string; report?: string; outputDir?: string; timeout: number; json?: boolean }) => {
     const bin = process.env['MCP_MIGRATE_DELTA_CONFORMANCE_BIN'];
+    // Read the baseline before the campaign so a wrong path costs nothing.
+    const baseline = opts.baseline ? readRunReport(opts.baseline) : null;
     let run;
     try {
       run = await runConformance({
@@ -64,14 +77,13 @@ program
     const report = toRunReport(run);
     if (run.timedOut) process.stderr.write(`The suite was killed after ${opts.timeout} ms; results below are partial.\n`);
 
-    if (!opts.baseline) {
+    if (!baseline) {
       if (opts.report) writeFileSync(opts.report, JSON.stringify(report, null, 2) + '\n');
       process.stdout.write((opts.json ? JSON.stringify(report, null, 2) : formatRun(report)) + '\n');
       process.exitCode = report.summary.scored.failed + report.summary.scored.crashed > 0 ? 1 : 0;
       return;
     }
 
-    const baseline = readRunReport(opts.baseline);
     const delta = computeDelta(baseline, run);
     if (opts.report) writeFileSync(opts.report, JSON.stringify(delta, null, 2) + '\n');
     process.stdout.write((opts.json ? JSON.stringify(delta, null, 2) : formatRun(report) + '\n\n' + formatDelta(delta)) + '\n');

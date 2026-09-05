@@ -2,9 +2,20 @@
   "name": "mcp-migrate-delta",
   "version": "0.1.0",
   "description": "Measure what MCP revision 2026-07-28 breaks in a 2025-11-25 TypeScript server, and prove the migration with the official conformance suite before and after.",
-  "keywords": ["mcp", "model-context-protocol", "migration", "conformance", "2026-07-28", "2025-11-25"],
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "migration",
+    "conformance",
+    "2026-07-28",
+    "2025-11-25"
+  ],
   "license": "Apache-2.0",
   "author": "Amir Kellou-Sidhoum",
+  "homepage": "https://github.com/AmirK-S/mcp-migrate-delta#readme",
+  "bugs": {
+    "url": "https://github.com/AmirK-S/mcp-migrate-delta/issues"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/AmirK-S/mcp-migrate-delta.git"
@@ -24,15 +35,25 @@
       "default": "./dist/index.js"
     }
   },
-  "files": ["dist", "README.md", "LICENSE", "NOTICE", "CHANGELOG.md"],
-  "workspaces": ["fixtures/before", "fixtures/after"],
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE",
+    "NOTICE",
+    "CHANGELOG.md"
+  ],
+  "workspaces": [
+    "fixtures/before",
+    "fixtures/after"
+  ],
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
-    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "typecheck": "tsc -p tsconfig.json --noEmit && tsc -p tsconfig.test.json",
     "test": "vitest run --exclude 'test/network/**'",
     "test:network": "vitest run test/network",
     "test:all": "vitest run",
-    "prepublishOnly": "npm run typecheck && npm run build && npm test"
+    "prepublishOnly": "npm run typecheck && npm run build && npm test",
+    "demo": "npm run build && node dist/cli.js scan fixtures/before; npm run test:network"
   },
   "dependencies": {
     "@modelcontextprotocol/conformance": "0.2.0-alpha.11",

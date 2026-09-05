@@ -34,5 +34,5 @@ Under **2025-11-25**: all 30 scored scenarios pass, **70 scored checks passed,
 0 failed**. The two failures reported are `json-schema-2020-12` and
 `server-sse-polling`, both marked `pending` and never scored.
 
-Under **2026-07-28**: **11 scored checks passed, 95 failed**, across 34 of the
+Under **2026-07-28**: **11 scored checks passed, 95 failed**, across 36 of the
 37 scored scenarios. That is the delta the migration closes, and it is expected.

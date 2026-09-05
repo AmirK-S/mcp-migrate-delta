@@ -51,17 +51,25 @@ mcp-migrate-delta verify --url http://localhost:3000/mcp --report before.json
 mcp-migrate-delta verify --url http://localhost:3000/mcp --baseline before.json --report delta.json
 ```
 
+Or see the whole thing on the bundled servers in one command: `npm run demo`.
+
 `verify --baseline` exits `1` if any check of a scored scenario went from `SUCCESS` to
 `FAILURE`, and `0` otherwise, even when failures remain. It is a regression gate, not a
 conformance badge: the suite's own exit code is that badge, and it is reported alongside.
 
 ## A real run
 
-The repository ships two servers with the same functional surface (20 tools, 5 prompts,
-2 resources, 1 template, the surface the suite's scenarios expect): `fixtures/before` on
-`@modelcontextprotocol/sdk` `1.30.0`, revision `2025-11-25`, and `fixtures/after` migrated by
-hand to `@modelcontextprotocol/server` `2.0.0`, revision `2026-07-28`. Everything below is the
-actual output on 05 September 2026.
+The repository ships two servers with the same domain surface, each written for its own
+revision: `fixtures/before` on `@modelcontextprotocol/sdk` `1.30.0`, revision `2025-11-25`
+(15 tools, 4 prompts, 3 resources, 1 template), and `fixtures/after` migrated by hand to
+`@modelcontextprotocol/server` `2.0.0`, revision `2026-07-28` (20 tools, 5 prompts,
+2 resources, 1 template). The two surfaces cannot be identical: the elicitation, sampling
+and roots tools of `2025-11-25` have no same-named counterpart once server-initiated
+requests become multi round-trip results, and the subscribed resource disappears with
+`resources/subscribe`. That is what the `9 added, 4 removed` checks of the delta below
+account for. Everything else keeps the same tool, prompt and resource names with the same
+contents. Everything below is the actual output on 05 September 2026, abridged where a
+`...` marks a cut, with the absolute scan path shortened.
 
 ```bash
 PORT=3001 node fixtures/before/src/server.mjs &
@@ -76,7 +84,7 @@ mcp-migrate-delta 0.1.0 scan of fixtures/before
 Revision 2025-11-25 to 2026-07-28, 2 file(s), 4 rule(s)
 
 package.json
-  11:5  breaking sdk-v1-package [Major 2]
+  11:5  breaking sdk-v1-package [Major 2, Major 3]
       dependencies pins @modelcontextprotocol/sdk at "1.30.0", a 1.x line that cannot serve revision 2026-07-28.
       "@modelcontextprotocol/sdk": "1.30.0",
 src/server.mjs
@@ -93,6 +101,7 @@ src/server.mjs
   103:5  breaking stateful-handshake [Major 1, Major 2]
       Hooks oninitialized; the initialize handshake no longer exists in 2026-07-28.
       server.server.oninitialized = () => {
+  ...
   542:9  breaking stateful-handshake [Major 1, Major 2]
       Transport mints a session id with sessionIdGenerator; 2026-07-28 has no protocol sessions.
       sessionIdGenerator: () => randomUUID(),
@@ -126,6 +135,7 @@ Failing scored scenarios:
 Root causes, by failing checks:
     47  Bad Request: server not initialized  [34 scenario(s)]
     25  [implementation] response to 'tools/call' (spec 2026-07-28): JSONRPCErrorResponse/id: must be string,integer  [25 scenario(s)]
+  ...
      5  Expected HTTP 404 and code -32601 for removed methods, got HTTP 400 and code -32000  [1 scenario(s)]
      3  Expected error code -32602, got -32000  [1 scenario(s)]
   ...
@@ -146,6 +156,7 @@ $ mcp-migrate-delta verify --url http://localhost:3002/mcp --baseline before.jso
 Scored scenarios: 37 passed, 0 failed, 0 crashed, 0 empty, 37 total
 Not scored: 1 passed, 11 failed, 0 crashed, 1 empty (never count)
 Checks: 147 success, 36 failure, 0 warning, 1 skipped, 1 info
+  ...
 
 Delta on --requirements 2026-07-28
   baseline: http://localhost:3001/mcp (2026-09-05T18:25:33.503Z)
@@ -190,7 +201,7 @@ The suite is built for humans and for CI badges, not for programs. Observed on
 
 | Rule | Severity | Changelog | Detects |
 | --- | --- | --- | --- |
-| `sdk-v1-package` | breaking | Major 2 | A manifest depending on `@modelcontextprotocol/sdk` 1.x. The 1.x line serves `2025-11-25` at most: no `server/discover`, `2026-07-28` rejected as unsupported. Every other rule presupposes this one. |
+| `sdk-v1-package` | breaking | Major 2, Major 3 | A manifest depending on `@modelcontextprotocol/sdk` 1.x. The 1.x line serves `2025-11-25` at most: no `server/discover`, `2026-07-28` rejected as unsupported. Every other rule presupposes this one. |
 | `stateful-handshake` | breaking | Major 1, Major 2 | `sessionIdGenerator` on a Streamable HTTP transport, the `Mcp-Session-Id` header, `InitializeRequestSchema`, `InitializedNotificationSchema`, `oninitialized`, and `initialize` or `notifications/initialized` used as a method name. |
 | `removed-methods` | breaking | Major 5 | `SetLevelRequestSchema`, `PingRequestSchema`, `RootsListChangedNotificationSchema`, `.ping()` on a server or client, and `ping`, `logging/setLevel`, `notifications/roots/list_changed` used as method names. |
 | `error-codes` | breaking | Minor 6 | `-32002` for resource not found, with a safe replacement by `-32602`. Also flags `-32042` (URL elicitation required, `2025-11-25` only) as advisory: the multi round-trip pattern replaces it, there is no mechanical rewrite. |
@@ -202,8 +213,12 @@ draft itself and never existed in `2025-11-25`; in 1.x code `-32001` is the SDK'
 rule rewriting them would be a guaranteed false positive. Likewise `resultType`, `ttlMs` and
 `cacheScope` are stamped by both official SDKs on every result once the negotiated revision
 is `2026-07-28`, so a rule about them would only ever fire on hand-built JSON-RPC envelopes.
+Likewise `resources/subscribe` and `resources/unsubscribe` of Major 4: they disappear into
+`subscriptions/listen`, but a handler for them is dead code rather than a wire error, and
+the 2.x SDK offers no drop-in replacement to point at. `fixtures/before` serves both, and
+`verify` reports what the suite makes of them.
 
-Run `mcp-migrate-delta rules` for the full text of each rule, including remediation.
+Run `mcp-migrate-delta rules` for the full text of each rule, including its remediation; `rules --json` gives the same as data.
 
 ## What migration means in TypeScript
 
@@ -223,28 +238,29 @@ they may be intentional.
 
 ## Scanning the SDK itself, as a measurement
 
-A scan of `modelcontextprotocol/typescript-sdk` at commit `5119ee7f` (05 September 2026)
-reports 680 breaking findings across 743 files. That is expected and is not a false
-positive rate: the SDK implements both eras, its server dispatches `ping`, `logging/setLevel`
-and `initialize` for legacy clients, its client builds `initialize`, and 195 of the
-findings sit in its tests. An SDK must contain the constructions a scanner looks for. The
-false positive oracle of this project is `fixtures/after`, a server written on the 2.x SDK
-the modern way, on which the scanner is silent.
+A scan of `modelcontextprotocol/typescript-sdk` at commit `5119ee7f`, run on 05 September
+2026, reports 680 breaking findings, spread over 129 of the 743 files it reads. That is
+expected and is not a false positive rate: the SDK implements both eras, its server
+dispatches `ping`, `logging/setLevel` and `initialize` for legacy clients, its client builds
+`initialize`, and 539 of those 680 findings sit in its test files. An SDK must contain the
+constructions a scanner looks for. The false positive oracle of this project is
+`fixtures/after`, a server written on the 2.x SDK the modern way, on which the scanner is
+silent.
 
 ## Exit codes
 
 | Command | 0 | 1 | 2 |
 | --- | --- | --- | --- |
 | `scan` | no breaking finding | at least one breaking finding | usage error, unreadable path |
-| `verify` | no scored scenario failed or crashed | at least one did | usage error, no HTTP server at the URL, unknown revision |
+| `verify` | no scored scenario failed or crashed | at least one did | usage error, no HTTP server at the URL, unknown revision, unreadable baseline |
 | `verify --baseline` | no regression | at least one check of a scored scenario regressed | as above, or the baseline is not a run report |
 
 ## JSON reports
 
 Every report carries `reportVersion` (currently `1`) and `kind` (`scan`, `run` or `delta`).
 A consumer that sees a higher version than it knows should refuse to parse rather than guess.
-The shapes are the exported TypeScript types in `src/report.ts`: `ScanReport`, `RunReport`,
-`DeltaReport`. The programmatic API mirrors the CLI:
+The shapes are the exported TypeScript types `ScanReport`, `RunReport` and `DeltaReport`
+(`src/report.ts` in the repository, `dist/report.d.ts` in the package). The programmatic API mirrors the CLI:
 
 ```ts
 import { runConformance, computeDelta, deltaExitCode } from 'mcp-migrate-delta';

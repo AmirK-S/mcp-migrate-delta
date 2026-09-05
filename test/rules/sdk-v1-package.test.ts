@@ -9,7 +9,7 @@ describe(RULE, () => {
     expect(findings).toHaveLength(1);
     const f = findings[0]!;
     expect(f.severity).toBe('breaking');
-    expect(f.section).toBe('Major 2');
+    expect(f.section).toBe('Major 2, Major 3');
     expect(f.file).toBe('package.json');
     expect(f.line).toBeGreaterThan(1);
     expect(f.snippet).toContain('@modelcontextprotocol/sdk');
