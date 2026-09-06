@@ -1,0 +1,764 @@
+{
+  "reportVersion": 1,
+  "kind": "ecosystem",
+  "tool": {
+    "name": "mcp-migrate-delta",
+    "version": "0.1.0"
+  },
+  "date": "2026-09-06",
+  "method": "Per server, at most two POST requests: server/discover with the 2026-07-28 headers and _meta, then initialize (2025-11-25) when discover did not settle the verdict. No tools/call, no notifications/initialized, one pass, no retry (429 included), 15 s timeout, 5 s pause between requests and between servers, no Origin header, no credentials, identifying User-Agent, body kept to 4 KiB. A verdict records what a server declares, not that it conforms.",
+  "selectionFile": "docs/ecosystem/selection-2026-09-06.json",
+  "total": 30,
+  "counts": {
+    "legacy": 19,
+    "auth-required": 7,
+    "other": 3,
+    "unreachable": 1
+  },
+  "servers": [
+    {
+      "name": "io.github.pipeworx-io/useragent",
+      "version": "0.1.0",
+      "url": "https://gateway.pipeworx.io/useragent/mcp",
+      "updatedAt": "2026-07-01T18:55:32.664052Z",
+      "publishedAt": "2026-07-01T18:55:32.664052Z",
+      "source": "https://registry.modelcontextprotocol.io/v0.1/servers?limit=100&version=latest",
+      "rang": 1,
+      "lot": "mesure",
+      "cle_tri_sha256": "0009149dc558453d",
+      "probedAt": "2026-09-06T05:09:13.760Z",
+      "durationMs": 5184,
+      "verdict": "legacy",
+      "protocolVersions": [
+        "2025-03-26"
+      ],
+      "serverName": "pipeworx-gateway",
+      "detail": "server/discover HTTP 200 (error -32601 Method not found: server/discover); initialize negotiated 2025-03-26",
+      "discover": {
+        "status": 200,
+        "contentType": "text/event-stream"
+      },
+      "initialize": {
+        "status": 200,
+        "contentType": "text/event-stream"
+      }
+    },
+    {
+      "name": "io.github.shibley/mymcptools",
+      "version": "0.1.1",
+      "url": "https://mymcptools.com/api/mcp",
+      "updatedAt": "2026-07-30T07:38:13.112025Z",
+      "publishedAt": "2026-07-30T07:38:13.112025Z",
+      "source": "https://registry.modelcontextprotocol.io/v0.1/servers?limit=100&version=latest",
+      "rang": 2,
+      "lot": "mesure",
+      "cle_tri_sha256": "0014b744938e1a26",
+      "probedAt": "2026-09-06T05:09:23.946Z",
+      "durationMs": 6522,
+      "verdict": "legacy",
+      "protocolVersions": [
+        "2025-11-25"
+      ],
+      "serverName": "mymcptools",
+      "detail": "server/discover HTTP 400 (error -32000 Bad Request: Unsupported protocol version: 2026-07-28 (supported versions: 2025-); initialize negotiated 2025-11-25",
+      "discover": {
+        "status": 400,
+        "contentType": "application/json"
+      },
+      "initialize": {
+        "status": 200,
+        "contentType": "application/json"
+      }
+    },
+    {
+      "name": "io.github.nicglazkov/commutescout",
+      "version": "2.24.0",
+      "url": "https://mcp.commutescout.com/mcp",
+      "updatedAt": "2026-07-18T07:05:32.72648Z",
+      "publishedAt": "2026-07-18T07:05:32.72648Z",
+      "source": "https://registry.modelcontextprotocol.io/v0.1/servers?limit=100&version=latest",
+      "rang": 3,
+      "lot": "mesure",
+      "cle_tri_sha256": "001e7df388ecaf58",
+      "probedAt": "2026-09-06T05:09:35.469Z",
+      "durationMs": 5427,
+      "verdict": "legacy",
+      "protocolVersions": [
+        "2025-11-25"
+      ],
+      "serverName": "CommuteScout",
+      "detail": "server/discover HTTP 400 (error -32600 Bad Request: Unsupported protocol version: 2026-07-28. Supported versions: 2024-); initialize negotiated 2025-11-25",
+      "discover": {
+        "status": 400,
+        "contentType": "application/json"
+      },
+      "initialize": {
+        "status": 200,
+        "contentType": "text/event-stream"
+      }
+    },
+    {
+      "name": "io.github.mcp-dir/transparencia_indicadores_pj-mcp",
+      "version": "0.1.0",
+      "url": "https://api.mcp.ai/p_transparencia_indicadores_pj",
+      "updatedAt": "2026-08-15T20:42:25.496021Z",
+      "publishedAt": "2026-08-15T20:42:25.496021Z",
+      "source": "https://registry.modelcontextprotocol.io/v0.1/servers?limit=100&version=latest",
+      "rang": 4,
+      "lot": "mesure",
+      "cle_tri_sha256": "001f16930f5bb426",
+      "probedAt": "2026-09-06T05:09:45.898Z",
+      "durationMs": 5678,
+      "verdict": "legacy",
+      "protocolVersions": [
+        "2025-11-25"
+      ],
+      "serverName": "mcp-ai",
+      "detail": "server/discover HTTP 400 (error -32000 Bad Request: Server not initialized); initialize negotiated 2025-11-25",
+      "discover": {
+        "status": 400,
+        "contentType": "application/json"
+      },
+      "initialize": {
+        "status": 200,
+        "contentType": "text/event-stream"
+      }
+    },
+    {
+      "name": "app.evlek/mcp-server",
+      "version": "1.9.0",
+      "url": "https://evlek.app/api/mcp",
+      "updatedAt": "2026-08-01T18:30:07.677598Z",
+      "publishedAt": "2026-08-01T18:30:07.677598Z",
+      "source": "https://registry.modelcontextprotocol.io/v0.1/servers?limit=100&version=latest",
+      "rang": 5,
+      "lot": "mesure",
+      "cle_tri_sha256": "0031f76b6a9d4821",
+      "probedAt": "2026-09-06T05:09:56.577Z",
+      "durationMs": 6254,
+      "verdict": "legacy",
+      "protocolVersions": [
+        "2025-11-25"
+      ],
+      "serverName": "evlek-mcp",
+      "detail": "server/discover HTTP 200 (error -32601 Method not found: server/discover); initialize negotiated 2025-11-25",
+      "discover": {
+        "status": 200,
+        "contentType": "application/json"
+      },
+      "initialize": {
+        "status": 200,
+        "contentType": "application/json"
+      }
+    },
+    {
+      "name": "com.ablakunio/nyilaszaro-mcp",
+      "version": "0.1.0",
+      "url": "https://www.ablakunio.com/api/mcp",
+      "updatedAt": "2026-06-29T08:31:27.420533Z",
+      "publishedAt": "2026-06-29T08:31:27.420533Z",
+      "source": "https://registry.modelcontextprotocol.io/v0.1/servers?limit=100&version=latest",
+      "rang": 6,
+      "lot": "mesure",
+      "cle_tri_sha256": "0040c1b98006e6e6",
+      "probedAt": "2026-09-06T05:10:07.833Z",
+      "durationMs": 5192,
+      "verdict": "legacy",
+      "protocolVersions": [
+        "2025-11-25"
+      ],
+      "serverName": "ablakunio-mcp",
+      "detail": "server/discover HTTP 200 (error -32601 Method not found: server/discover); initialize negotiated 2025-11-25",
+      "discover": {
+        "status": 200,
+        "contentType": "application/json"
+      },
+      "initialize": {
+        "status": 200,
+        "contentType": "application/json"
+      }
+    },
+    {
+      "name": "io.sunaivacore/gate",
+      "version": "2.0.4",
+      "url": "https://mcp.sunaivacore.io",
+      "updatedAt": "2026-07-19T02:17:41.41246Z",
+      "publishedAt": "2026-07-19T02:17:41.41246Z",
+      "source": "https://registry.modelcontextprotocol.io/v0.1/servers?limit=100&version=latest",
+      "rang": 7,
+      "lot": "mesure",
+      "cle_tri_sha256": "0044ef6e5b8c82fc",
+      "probedAt": "2026-09-06T05:10:18.027Z",
+      "durationMs": 66,
+      "verdict": "auth-required",
+      "protocolVersions": [],
+      "detail": "HTTP 401 on server/discover",
+      "discover": {
+        "status": 401,
+        "contentType": "application/json"
+      }
+    },
+    {
+      "name": "dev.uptimepage/uptimepage",
+      "version": "1.0.0",
+      "url": "https://mcp.uptimepage.dev/mcp",
+      "updatedAt": "2026-08-11T04:11:38.871916Z",
+      "publishedAt": "2026-08-11T04:11:38.871916Z",
+      "source": "https://registry.modelcontextprotocol.io/v0.1/servers?limit=100&version=latest",
+      "rang": 8,
+      "lot": "mesure",
+      "cle_tri_sha256": "0048cdca0a571bea",
+      "probedAt": "2026-09-06T05:10:23.094Z",
+      "durationMs": 193,
+      "verdict": "auth-required",
+      "protocolVersions": [],
+      "detail": "HTTP 401 on server/discover",
+      "discover": {
+        "status": 401,
+        "contentType": "text/plain; charset=utf-8"
+      }
+    },
+    {
+      "name": "global.rootz.cars/marketplace",
+      "version": "1.0.0",
+      "url": "https://cars.rootz.global/mcp",
+      "updatedAt": "2026-05-07T03:54:05.725643Z",
+      "publishedAt": "2026-05-07T03:54:05.725643Z",
+      "source": "https://registry.modelcontextprotocol.io/v0.1/servers?limit=100&version=latest",
+      "rang": 9,
+      "lot": "mesure",
+      "cle_tri_sha256": "0061f4d016917620",
+      "probedAt": "2026-09-06T05:10:28.288Z",
+      "durationMs": 5916,
+      "verdict": "legacy",
+      "protocolVersions": [
+        "2024-11-05"
+      ],
+      "serverName": "cars-rootz",
+      "detail": "server/discover HTTP 200 (error -32601 Unknown method: server/discover); initialize negotiated 2024-11-05",
+      "discover": {
+        "status": 200,
+        "contentType": "application/json; charset=utf-8"
+      },
+      "initialize": {
+        "status": 200,
+        "contentType": "application/json; charset=utf-8"
+      }
+    },
+    {
+      "name": "live.alpic.staging.python-email-mcp-f5c8e0a7/python-email-mcp",
+      "version": "0.0.3",
+      "url": "https://python-email-mcp-f5c8e0a7.staging.alpic.live",
+      "updatedAt": "2026-01-14T09:55:53.508136Z",
+      "publishedAt": "2026-01-14T09:55:53.508136Z",
+      "source": "https://registry.modelcontextprotocol.io/v0.1/servers?limit=100&version=latest",
+      "rang": 10,
+      "lot": "mesure",
+      "cle_tri_sha256": "006211b4ba119d7e",
+      "probedAt": "2026-09-06T05:10:39.206Z",
+      "durationMs": 5757,
+      "verdict": "other",
+      "protocolVersions": [],
+      "detail": "server/discover HTTP 404; initialize HTTP 404 application/json; charset=utf-8",
+      "discover": {
+        "status": 404,
+        "contentType": "application/json; charset=utf-8"
+      },
+      "initialize": {
+        "status": 404,
+        "contentType": "application/json; charset=utf-8"
+      }
+    },
+    {
+      "name": "in.sambodh-ias/upsc-prep",
+      "version": "1.0.0",
+      "url": "https://api.sambodh-ias.in/mcp",
+      "updatedAt": "2026-07-05T12:01:30.655848Z",
+      "publishedAt": "2026-07-05T12:01:30.655848Z",
+      "source": "https://registry.modelcontextprotocol.io/v0.1/servers?limit=100&version=latest",
+      "rang": 11,
+      "lot": "mesure",
+      "cle_tri_sha256": "006557b4f88b4423",
+      "probedAt": "2026-09-06T05:10:49.965Z",
+      "durationMs": 5690,
+      "verdict": "legacy",
+      "protocolVersions": [
+        "2025-11-25"
+      ],
+      "serverName": "Sambodh IAS",
+      "detail": "server/discover HTTP 400 (error -32600 Bad Request: Unsupported protocol version: 2026-07-28. Supported versions: 2024-); initialize negotiated 2025-11-25",
+      "discover": {
+        "status": 400,
+        "contentType": "application/json"
+      },
+      "initialize": {
+        "status": 200,
+        "contentType": "application/json"
+      }
+    },
+    {
+      "name": "com.roam2go/esim-catalog",
+      "version": "1.3.0",
+      "url": "https://roam2go.com/wp-json/r2g-mcp/v1/mcp",
+      "updatedAt": "2026-08-27T08:51:21.492763Z",
+      "publishedAt": "2026-08-27T08:51:21.492763Z",
+      "source": "https://registry.modelcontextprotocol.io/v0.1/servers?limit=100&version=latest",
+      "rang": 12,
+      "lot": "mesure",
+      "cle_tri_sha256": "0066a7e36c6bca1a",
+      "probedAt": "2026-09-06T05:11:00.657Z",
+      "durationMs": 17603,
+      "verdict": "legacy",
+      "protocolVersions": [
+        "2025-06-18"
+      ],
+      "serverName": "roam2go-catalog",
+      "detail": "server/discover HTTP 200 (error -32601 Method not found: server/discover); initialize negotiated 2025-06-18",
+      "discover": {
+        "status": 200,
+        "contentType": "application/json; charset=UTF-8"
+      },
+      "initialize": {
+        "status": 200,
+        "contentType": "application/json; charset=UTF-8"
+      }
+    },
+    {
+      "name": "ai.blast-radius/blast-radius",
+      "version": "0.1.0",
+      "url": "https://blast-radius.ai/mcp",
+      "updatedAt": "2026-06-30T16:00:12.196014Z",
+      "publishedAt": "2026-06-30T16:00:12.196014Z",
+      "source": "https://registry.modelcontextprotocol.io/v0.1/servers?limit=100&version=latest",
+      "rang": 13,
+      "lot": "mesure",
+      "cle_tri_sha256": "007b7f6a4889c24e",
+      "probedAt": "2026-09-06T05:11:23.263Z",
+      "durationMs": 5250,
+      "verdict": "legacy",
+      "protocolVersions": [
+        "2025-06-18"
+      ],
+      "serverName": "blast-radius",
+      "detail": "server/discover HTTP 200 (error -32601 Method not found: server/discover); initialize negotiated 2025-06-18",
+      "discover": {
+        "status": 200,
+        "contentType": "application/json"
+      },
+      "initialize": {
+        "status": 200,
+        "contentType": "application/json"
+      }
+    },
+    {
+      "name": "com.x402supply/chess-eval",
+      "version": "1.0.1",
+      "url": "https://chess-eval.x402supply.com/mcp",
+      "updatedAt": "2026-07-17T03:41:48.886289Z",
+      "publishedAt": "2026-07-17T03:41:48.886289Z",
+      "source": "https://registry.modelcontextprotocol.io/v0.1/servers?limit=100&version=latest",
+      "rang": 14,
+      "lot": "mesure",
+      "cle_tri_sha256": "008222beeeccea58",
+      "probedAt": "2026-09-06T05:11:33.515Z",
+      "durationMs": 5531,
+      "verdict": "legacy",
+      "protocolVersions": [
+        "2025-11-25"
+      ],
+      "serverName": "chess-eval",
+      "detail": "server/discover HTTP 402 (error); initialize negotiated 2025-11-25",
+      "discover": {
+        "status": 402,
+        "contentType": "application/json"
+      },
+      "initialize": {
+        "status": 200,
+        "contentType": "application/json"
+      }
+    },
+    {
+      "name": "io.github.srotzin/hive-mcp-trade",
+      "version": "1.1.0",
+      "url": "https://hive-mcp-gateway.onrender.com/trade/mcp",
+      "updatedAt": "2026-05-04T01:29:32.924232Z",
+      "publishedAt": "2026-05-04T01:29:32.924232Z",
+      "source": "https://registry.modelcontextprotocol.io/v0.1/servers?limit=100&version=latest",
+      "rang": 15,
+      "lot": "mesure",
+      "cle_tri_sha256": "0097353def532e32",
+      "probedAt": "2026-09-06T05:11:44.046Z",
+      "durationMs": 5829,
+      "verdict": "legacy",
+      "protocolVersions": [
+        "2024-11-05"
+      ],
+      "serverName": "hive-mcp-trade",
+      "detail": "server/discover HTTP 200 (error -32601 Method not found: server/discover); initialize negotiated 2024-11-05",
+      "discover": {
+        "status": 200,
+        "contentType": "application/json; charset=utf-8"
+      },
+      "initialize": {
+        "status": 200,
+        "contentType": "application/json; charset=utf-8"
+      }
+    },
+    {
+      "name": "com.skingrind/skingrind",
+      "version": "1.0.0",
+      "url": "https://cloud.skingrind.com/mcp",
+      "updatedAt": "2026-07-28T20:33:23.20489Z",
+      "publishedAt": "2026-07-28T20:33:23.20489Z",
+      "source": "https://registry.modelcontextprotocol.io/v0.1/servers?limit=100&version=latest",
+      "rang": 16,
+      "lot": "mesure",
+      "cle_tri_sha256": "00b9302a6a691b4c",
+      "probedAt": "2026-09-06T05:11:54.877Z",
+      "durationMs": 5288,
+      "verdict": "legacy",
+      "protocolVersions": [
+        "2025-11-25"
+      ],
+      "serverName": "SkinGrind",
+      "detail": "server/discover HTTP 200 (error -32601 The method [server/discover] was not found.); initialize negotiated 2025-11-25",
+      "discover": {
+        "status": 200,
+        "contentType": "application/json"
+      },
+      "initialize": {
+        "status": 200,
+        "contentType": "application/json"
+      }
+    },
+    {
+      "name": "io.mailmcp/mailmcp",
+      "version": "1.0.0",
+      "url": "https://mailmcp.io/mcp",
+      "updatedAt": "2026-08-07T09:59:08.34142Z",
+      "publishedAt": "2026-08-07T09:59:08.34142Z",
+      "source": "https://registry.modelcontextprotocol.io/v0.1/servers?limit=100&version=latest",
+      "rang": 17,
+      "lot": "mesure",
+      "cle_tri_sha256": "00d41102bb1294a9",
+      "probedAt": "2026-09-06T05:12:05.167Z",
+      "durationMs": 5245,
+      "verdict": "other",
+      "protocolVersions": [],
+      "detail": "server/discover HTTP 404; initialize HTTP 404 application/json",
+      "discover": {
+        "status": 404,
+        "contentType": "application/json"
+      },
+      "initialize": {
+        "status": 404,
+        "contentType": "application/json"
+      }
+    },
+    {
+      "name": "app.desktopcommander/remote-desktop-commander",
+      "version": "1.0.3",
+      "url": "https://mcp.desktopcommander.app/mcp",
+      "updatedAt": "2026-07-17T20:01:32.244472Z",
+      "publishedAt": "2026-07-17T20:01:32.244472Z",
+      "source": "https://registry.modelcontextprotocol.io/v0.1/servers?limit=100&version=latest",
+      "rang": 18,
+      "lot": "mesure",
+      "cle_tri_sha256": "00d8d33359e8dc2e",
+      "probedAt": "2026-09-06T05:12:15.415Z",
+      "durationMs": 74,
+      "verdict": "auth-required",
+      "protocolVersions": [],
+      "detail": "HTTP 401 on server/discover",
+      "discover": {
+        "status": 401,
+        "contentType": "application/json; charset=utf-8"
+      }
+    },
+    {
+      "name": "com.trimtabist/us-tariff-ledger",
+      "version": "0.3.1",
+      "url": "https://trimtabist.com/mcp",
+      "updatedAt": "2026-08-09T09:05:32.371802Z",
+      "publishedAt": "2026-08-09T09:05:32.371802Z",
+      "source": "https://registry.modelcontextprotocol.io/v0.1/servers?limit=100&version=latest",
+      "rang": 19,
+      "lot": "mesure",
+      "cle_tri_sha256": "00e374e3447d9781",
+      "probedAt": "2026-09-06T05:12:20.491Z",
+      "durationMs": 5606,
+      "verdict": "legacy",
+      "protocolVersions": [
+        "2025-06-18"
+      ],
+      "serverName": "trimtab-tariffs-trade",
+      "detail": "server/discover HTTP 200 (error -32601 Method not found: server/discover); initialize negotiated 2025-06-18",
+      "discover": {
+        "status": 200,
+        "contentType": "application/json"
+      },
+      "initialize": {
+        "status": 200,
+        "contentType": "application/json"
+      }
+    },
+    {
+      "name": "com.moltlinestudio/moltline",
+      "version": "1.1.0",
+      "url": "https://mcp.moltlinestudio.com/catalog",
+      "updatedAt": "2026-08-20T03:23:31.573748Z",
+      "publishedAt": "2026-08-20T03:23:31.573748Z",
+      "source": "https://registry.modelcontextprotocol.io/v0.1/servers?limit=100&version=latest",
+      "rang": 20,
+      "lot": "mesure",
+      "cle_tri_sha256": "00eda0f0652a2b91",
+      "probedAt": "2026-09-06T05:12:31.099Z",
+      "durationMs": 5760,
+      "verdict": "legacy",
+      "protocolVersions": [
+        "2025-11-25"
+      ],
+      "serverName": "moltline-catalog",
+      "detail": "server/discover HTTP 400 (error -32600 Bad Request: Missing session ID); initialize negotiated 2025-11-25",
+      "discover": {
+        "status": 400,
+        "contentType": "application/json"
+      },
+      "initialize": {
+        "status": 200,
+        "contentType": "application/json"
+      }
+    },
+    {
+      "name": "com.axiomatic-ai/prover",
+      "version": "0.1.0",
+      "url": "https://prover.axiomatic-ai.com/mcp/",
+      "updatedAt": "2026-02-23T22:16:23.957805Z",
+      "publishedAt": "2026-02-23T22:16:23.957805Z",
+      "source": "https://registry.modelcontextprotocol.io/v0.1/servers?limit=100&version=latest",
+      "rang": 21,
+      "lot": "mesure",
+      "cle_tri_sha256": "00fcb2e9f1b335ea",
+      "probedAt": "2026-09-06T05:12:41.861Z",
+      "durationMs": 104,
+      "verdict": "auth-required",
+      "protocolVersions": [],
+      "detail": "HTTP 401 on server/discover",
+      "discover": {
+        "status": 401,
+        "contentType": "application/json"
+      }
+    },
+    {
+      "name": "md.install/try",
+      "version": "0.1.1",
+      "url": "https://install.md/mcp/try",
+      "updatedAt": "2025-09-09T07:10:11.15668Z",
+      "publishedAt": "2025-09-09T07:10:11.15668Z",
+      "source": "https://registry.modelcontextprotocol.io/v0.1/servers?limit=100&version=latest",
+      "rang": 22,
+      "lot": "mesure",
+      "cle_tri_sha256": "010cb4c9df39b87d",
+      "probedAt": "2026-09-06T05:12:46.967Z",
+      "durationMs": 5735,
+      "verdict": "legacy",
+      "protocolVersions": [
+        "2025-06-18"
+      ],
+      "serverName": "install.md-anonymous",
+      "detail": "server/discover HTTP 400 (error -32000 Bad Request: Unsupported protocol version (supported versions: 2025-06-18, 2025-); initialize negotiated 2025-06-18",
+      "discover": {
+        "status": 400,
+        "contentType": ""
+      },
+      "initialize": {
+        "status": 200,
+        "contentType": "text/event-stream"
+      }
+    },
+    {
+      "name": "uk.co.shipmycar/quote",
+      "version": "2.0.0",
+      "url": "https://www.shipmycar.co.uk/mcp",
+      "updatedAt": "2026-06-04T08:57:41.882561Z",
+      "publishedAt": "2026-06-04T08:57:41.882561Z",
+      "source": "https://registry.modelcontextprotocol.io/v0.1/servers?limit=100&version=latest",
+      "rang": 23,
+      "lot": "mesure",
+      "cle_tri_sha256": "0110d3b654c94481",
+      "probedAt": "2026-09-06T05:12:57.706Z",
+      "durationMs": 5262,
+      "verdict": "legacy",
+      "protocolVersions": [
+        "2025-11-25"
+      ],
+      "serverName": "ShipMyCar Public Quote Connector",
+      "detail": "server/discover HTTP 400 (error -32000 Bad Request: Unsupported protocol version: 2026-07-28 (supported versions: 2025-); initialize negotiated 2025-11-25",
+      "discover": {
+        "status": 400,
+        "contentType": "application/json"
+      },
+      "initialize": {
+        "status": 200,
+        "contentType": "text/event-stream"
+      }
+    },
+    {
+      "name": "com.exploit-intel/eip-mcp",
+      "version": "0.3.9",
+      "url": "https://mcp.exploit-intel.com/mcp",
+      "updatedAt": "2026-02-24T17:56:59.327606Z",
+      "publishedAt": "2026-02-24T17:56:59.327606Z",
+      "source": "https://registry.modelcontextprotocol.io/v0.1/servers?limit=100&version=latest",
+      "rang": 24,
+      "lot": "mesure",
+      "cle_tri_sha256": "011149b5bd3c7d2a",
+      "probedAt": "2026-09-06T05:13:07.971Z",
+      "durationMs": 15,
+      "verdict": "unreachable",
+      "protocolVersions": [],
+      "detail": "fetch failed (getaddrinfo ENOTFOUND mcp.exploit-intel.com)",
+      "discover": {
+        "status": null
+      }
+    },
+    {
+      "name": "ai.searcheros/searcher-os",
+      "version": "1.0.1",
+      "url": "https://searcheros.ai/api/mcp/mcp",
+      "updatedAt": "2026-08-07T15:40:14.502878Z",
+      "publishedAt": "2026-08-07T15:40:14.502878Z",
+      "source": "https://registry.modelcontextprotocol.io/v0.1/servers?limit=100&version=latest",
+      "rang": 25,
+      "lot": "mesure",
+      "cle_tri_sha256": "01137d439bee00a2",
+      "probedAt": "2026-09-06T05:13:12.989Z",
+      "durationMs": 247,
+      "verdict": "auth-required",
+      "protocolVersions": [],
+      "detail": "HTTP 401 on server/discover",
+      "discover": {
+        "status": 401,
+        "contentType": "application/json"
+      }
+    },
+    {
+      "name": "io.github.eltociear/skill-audit-mcp",
+      "version": "1.1.0",
+      "url": "https://eltociear-skill-audit.hf.space/mcp",
+      "updatedAt": "2026-07-29T09:02:51.61601Z",
+      "publishedAt": "2026-07-29T09:02:51.61601Z",
+      "source": "https://registry.modelcontextprotocol.io/v0.1/servers?limit=100&version=latest",
+      "rang": 26,
+      "lot": "mesure",
+      "cle_tri_sha256": "0113bdbc6a8c54a5",
+      "probedAt": "2026-09-06T05:13:18.239Z",
+      "durationMs": 5457,
+      "verdict": "legacy",
+      "protocolVersions": [
+        "2025-06-18"
+      ],
+      "serverName": "skill-audit",
+      "detail": "server/discover HTTP 200 (error -32601 method not found: server/discover); initialize negotiated 2025-06-18",
+      "discover": {
+        "status": 200,
+        "contentType": "application/json"
+      },
+      "initialize": {
+        "status": 200,
+        "contentType": "application/json"
+      }
+    },
+    {
+      "name": "live.alpic.staging/node-email-mcp-59eeb419",
+      "version": "0.0.56",
+      "url": "https://node-email-mcp-59eeb419.staging.alpic.live",
+      "updatedAt": "2025-11-13T16:41:49.659931Z",
+      "publishedAt": "2025-11-13T16:41:49.659931Z",
+      "source": "https://registry.modelcontextprotocol.io/v0.1/servers?limit=100&version=latest",
+      "rang": 27,
+      "lot": "mesure",
+      "cle_tri_sha256": "013353178e658550",
+      "probedAt": "2026-09-06T05:13:28.697Z",
+      "durationMs": 5832,
+      "verdict": "other",
+      "protocolVersions": [],
+      "detail": "server/discover HTTP 404; initialize HTTP 404 application/json; charset=utf-8",
+      "discover": {
+        "status": 404,
+        "contentType": "application/json; charset=utf-8"
+      },
+      "initialize": {
+        "status": 404,
+        "contentType": "application/json; charset=utf-8"
+      }
+    },
+    {
+      "name": "io.usefulapi/youcanbookme",
+      "version": "1.0.0",
+      "url": "https://youcanbookme.usefulapi.io/mcp",
+      "updatedAt": "2026-07-18T06:19:44.961275Z",
+      "publishedAt": "2026-07-18T06:19:44.961275Z",
+      "source": "https://registry.modelcontextprotocol.io/v0.1/servers?limit=100&version=latest",
+      "rang": 28,
+      "lot": "mesure",
+      "cle_tri_sha256": "0158527848e7167f",
+      "probedAt": "2026-09-06T05:13:39.532Z",
+      "durationMs": 321,
+      "verdict": "auth-required",
+      "protocolVersions": [],
+      "detail": "HTTP 401 on server/discover",
+      "discover": {
+        "status": 401,
+        "contentType": "application/json"
+      }
+    },
+    {
+      "name": "io.github.lazymac2x/citation-verifier",
+      "version": "1.0.0",
+      "url": "https://api.lazy-mac.com/citation-verifier/mcp",
+      "updatedAt": "2026-05-16T11:56:30.095584Z",
+      "publishedAt": "2026-05-16T11:56:30.095584Z",
+      "source": "https://registry.modelcontextprotocol.io/v0.1/servers?limit=100&version=latest",
+      "rang": 29,
+      "lot": "mesure",
+      "cle_tri_sha256": "01587614fff798e8",
+      "probedAt": "2026-09-06T05:13:44.853Z",
+      "durationMs": 5289,
+      "verdict": "legacy",
+      "protocolVersions": [
+        "2024-11-05"
+      ],
+      "serverName": "citation-verifier",
+      "detail": "server/discover HTTP 200 (error -32601 Method not found: server/discover); initialize negotiated 2024-11-05",
+      "discover": {
+        "status": 200,
+        "contentType": "application/json"
+      },
+      "initialize": {
+        "status": 200,
+        "contentType": "application/json"
+      }
+    },
+    {
+      "name": "io.github.1powergrey/sios-gano-connector",
+      "version": "1.5.0",
+      "url": "https://sios-gano-connector.vercel.app/mcp",
+      "updatedAt": "2026-08-15T14:32:13.195832Z",
+      "publishedAt": "2026-08-15T14:32:13.195832Z",
+      "source": "https://registry.modelcontextprotocol.io/v0.1/servers?limit=100&version=latest",
+      "rang": 30,
+      "lot": "mesure",
+      "cle_tri_sha256": "01602707bf3cd3a2",
+      "probedAt": "2026-09-06T05:13:55.144Z",
+      "durationMs": 227,
+      "verdict": "auth-required",
+      "protocolVersions": [],
+      "detail": "HTTP 401 on server/discover",
+      "discover": {
+        "status": 401,
+        "contentType": "application/json; charset=utf-8"
+      }
+    }
+  ]
+}

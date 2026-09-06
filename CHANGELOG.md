@@ -12,6 +12,8 @@ Keep a Changelog, and the project follows Semantic Versioning.
   POST requests (`server/discover` for 2026-07-28, then `initialize` for 2025-11-25),
   never a `tools/call`, no retry, identifying User-Agent.
 - `probeUrl` falls back to a `server/discover` POST when a server drops GET connections.
+- `docs/ecosystem/`: first measurement on thirty public registry servers, dated 2026-09-06,
+  with the selection file and the raw verdicts. README section "Ecosystem measurement".
 
 ## [0.1.0] - 2026-09-05
 

@@ -249,6 +249,44 @@ constructions a scanner looks for. The false positive oracle of this project is
 `fixtures/after`, a server written on the 2.x SDK the modern way, on which the scanner is
 silent.
 
+## Ecosystem measurement
+
+Measured on 06 September 2026, from the official registry, with the probe in
+`src/ecosystem/` and the script `scripts/measure-ecosystem.mjs`. Raw results, the selection
+file and the method are in `docs/ecosystem/`.
+
+**Sample.** The registry (`/v0.1/servers?version=latest`) listed 27 410 servers that day,
+15 465 with a remote endpoint. Filters: active, latest version, an `https` Streamable HTTP
+remote without declared headers or template variables, no localhost or tunnel host, no
+authentication word in the description, published more than seven days earlier. That leaves
+10 027 candidates. Recency was rejected as a selection rule because the most recently updated
+entries were a temporary tunnel and three servers of one publisher; the thirty are instead one
+server per namespace, host and URL, ordered by the SHA-256 of the registry name. The rule is
+deterministic and replayable as the corpus grows.
+
+**Probe.** At most two POST requests per server: `server/discover` on the 2026-07-28 wire
+(the three SEP-2243 headers and per-request `_meta`), then, only if that did not settle the
+verdict, a 2025-11-25 `initialize` that is never followed. Never a `tools/call`, no
+credentials, no `Origin` header, no retry (a 429 counts as such), 15 s timeout, 5 s pause
+between requests and between servers, an identifying User-Agent, bodies kept to 4 KiB. The
+whole pass sent at most 60 requests.
+
+**Result, 30 servers.**
+
+| Verdict | Servers | Meaning |
+| --- | --- | --- |
+| declares 2026-07-28 | 0 | `supportedVersions` or a `-32022` listing the revision |
+| legacy | 19 | negotiates an earlier revision on `initialize`: 10 on `2025-11-25`, 5 on `2025-06-18`, 3 on `2024-11-05`, 1 on `2025-03-26` |
+| auth-required | 7 | 401, or 403 with `WWW-Authenticate`; nothing else can be said |
+| other | 3 | HTTP 404 with a JSON body on both requests; not an MCP endpoint at that URL that day |
+| unreachable | 1 | no HTTP answer |
+
+Of the 23 endpoints that answered MCP or refused for authorization, none declared the
+current revision, forty days after it shipped. A verdict records what a server declares,
+not that it conforms: a server declaring `2026-07-28` would still have to pass the suite.
+Server names and URLs are in `docs/ecosystem/2026-09-06.md`; no judgement on their authors
+is implied, and any operator who wants an endpoint removed from the list can open an issue.
+
 ## Exit codes
 
 | Command | 0 | 1 | 2 |
