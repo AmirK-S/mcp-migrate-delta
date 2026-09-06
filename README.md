@@ -23,9 +23,10 @@ produced it verifies nothing. The proof that a migration worked is the official 
 before and after, and the difference between the two runs. That difference is what this
 tool computes, check by check, with an exit code that fails on any regression.
 
-The scanner half is deliberately small: four rules, each mapped to an entry of the
+The scanner half is deliberately small: five rules, each mapped to an entry of the
 `2026-07-28` changelog, tuned for zero false positives on a migrated server rather than for
-coverage. It tells you what will break; `verify` tells you whether it did.
+coverage. It tells you what will break; `verify` tells you whether it did. `fix` applies the
+one replacement that is mechanical and leaves the rest to you.
 
 ## Install
 
@@ -81,8 +82,8 @@ PORT=3002 node fixtures/after/src/server.mjs &
 
 ```
 $ mcp-migrate-delta scan fixtures/before
-mcp-migrate-delta 0.1.0 scan of fixtures/before
-Revision 2025-11-25 to 2026-07-28, 2 file(s), 4 rule(s)
+mcp-migrate-delta 0.2.0 scan of fixtures/before
+Revision 2025-11-25 to 2026-07-28, 2 file(s), 5 rule(s)
 
 package.json
   11:5  breaking sdk-v1-package [Major 2, Major 3]
@@ -108,11 +109,13 @@ src/server.mjs
       sessionIdGenerator: () => randomUUID(),
   ...
 
-10 breaking, 0 advisory
+13 breaking, 0 advisory
 2 finding(s) have a safe mechanical replacement, shown inline.
 ```
 
 Exit code `1`. The same command on `fixtures/after` prints `No finding` and exits `0`.
+`mcp-migrate-delta fix fixtures/before` would apply the two safe replacements and list the
+eleven other findings for a human; `--dry-run` shows the same without writing.
 
 ### `verify` on the server before migration
 
@@ -206,6 +209,7 @@ The suite is built for humans and for CI badges, not for programs. Observed on
 | `sdk-v1-package` | breaking | Major 2, Major 3 | A manifest depending on `@modelcontextprotocol/sdk` 1.x. The 1.x line serves `2025-11-25` at most: no `server/discover`, `2026-07-28` rejected as unsupported. Every other rule presupposes this one. |
 | `stateful-handshake` | breaking | Major 1, Major 2 | `sessionIdGenerator` on a Streamable HTTP transport, the `Mcp-Session-Id` header, `InitializeRequestSchema`, `InitializedNotificationSchema`, `oninitialized`, and `initialize` or `notifications/initialized` used as a method name. |
 | `removed-methods` | breaking | Major 5 | `SetLevelRequestSchema`, `PingRequestSchema`, `RootsListChangedNotificationSchema`, `.ping()` on a server or client, and `ping`, `logging/setLevel`, `notifications/roots/list_changed` used as method names. |
+| `resource-subscriptions` | breaking | Major 4 | `SubscribeRequestSchema`, `UnsubscribeRequestSchema`, `resources/subscribe` or `resources/unsubscribe` used as method names, and the `resources: { subscribe: true }` capability flag. Replaced by `subscriptions/listen`; no mechanical rewrite. |
 | `error-codes` | breaking | Minor 6 | `-32002` for resource not found, with a safe replacement by `-32602`. Also flags `-32042` (URL elicitation required, `2025-11-25` only) as advisory: the multi round-trip pattern replaces it, there is no mechanical rewrite. |
 
 What is deliberately **not** a rule: the renumbering `-32001` to `-32020`, `-32003` to
@@ -215,10 +219,6 @@ draft itself and never existed in `2025-11-25`; in 1.x code `-32001` is the SDK'
 rule rewriting them would be a guaranteed false positive. Likewise `resultType`, `ttlMs` and
 `cacheScope` are stamped by both official SDKs on every result once the negotiated revision
 is `2026-07-28`, so a rule about them would only ever fire on hand-built JSON-RPC envelopes.
-Likewise `resources/subscribe` and `resources/unsubscribe` of Major 4: they disappear into
-`subscriptions/listen`, but a handler for them is dead code rather than a wire error, and
-the 2.x SDK offers no drop-in replacement to point at. `fixtures/before` serves both, and
-`verify` reports what the suite makes of them.
 
 Run `mcp-migrate-delta rules` for the full text of each rule, including its remediation; `rules --json` gives the same as data.
 
@@ -297,6 +297,14 @@ Server names and URLs are in `docs/ecosystem/2026-09-06.md`; no judgement on the
 implied. The probe's User-Agent names this repository, and any operator who wants an endpoint
 left out of future runs can open an issue here.
 
+## Agent skill
+
+`skill/SKILL.md`, shipped in the package, is the procedure for a coding agent that migrates a
+server: measure with `scan` and a `verify --report before.json` baseline before touching
+anything, migrate with the official codemod and guide (linked, not copied), then prove with
+`verify --baseline`. It contains no migration knowledge of its own, so it cannot drift from
+the SDK's documentation. `skill/references/interpreting.md` says how to read a delta.
+
 ## Exit codes
 
 | Command | 0 | 1 | 2 |
@@ -304,6 +312,7 @@ left out of future runs can open an issue here.
 | `scan` | no breaking finding | at least one breaking finding | usage error, unreadable path |
 | `verify` | no scored scenario failed or crashed | at least one did | usage error, no HTTP server at the URL, unknown revision, unreadable baseline |
 | `verify --baseline` | no regression | at least one check of a scored scenario regressed | as above, or the baseline is not a run report |
+| `fix` | every safe replacement applied, or nothing to do | at least one replacement skipped because the file changed since the scan | usage error, unreadable path |
 
 ## JSON reports
 
@@ -324,11 +333,12 @@ process.exitCode = deltaExitCode(delta);
 ## Scope, and what this tool does not do
 
 - TypeScript and JavaScript only. Python servers already have `mcp-migrate` on PyPI.
-- No `fix` command. The only safe mechanical rewrite in this migration is `-32002` to
-  `-32602`; everything else is architectural, and the tool says so instead of pretending.
+- `fix` rewrites exactly one thing, `-32002` to `-32602`, after checking the text at the
+  reported position; everything else is architectural, and the tool says so instead of
+  pretending.
 - No HTTP+SSE, no stdio: `verify` targets a Streamable HTTP endpoint, which is what the
   suite's `server` command tests.
-- Four rules, not sixteen. The other entries of the changelog are either handled by the
+- Five rules, not sixteen. The other entries of the changelog are either handled by the
   SDK once the package changes, or detectable only on hand-built envelopes.
 
 ## Development

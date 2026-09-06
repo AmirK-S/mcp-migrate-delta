@@ -11,7 +11,7 @@ export interface RuleMatch {
   severity?: Severity;
   /** Override the rule's remediation for this match. */
   remediation?: string;
-  fix?: { confidence: FixConfidence; replacement: string } | null;
+  fix?: { confidence: FixConfidence; replacement: string; original?: string } | null;
 }
 
 export interface PackageManifest {

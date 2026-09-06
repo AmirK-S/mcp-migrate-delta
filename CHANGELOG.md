@@ -5,7 +5,17 @@ Keep a Changelog, and the project follows Semantic Versioning.
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-09-06
+
 ### Added
+
+- `resource-subscriptions` rule (Major 4): `resources/subscribe`, `resources/unsubscribe`
+  handlers, method names and the `resources.subscribe` capability flag, detection only.
+- `fix` command: applies the safe replacements found by `scan` (`-32002` to `-32602`) after
+  checking the text at the reported position; `--dry-run`; everything else is listed for a
+  human. Findings now carry `fix.original`.
+- `skill/SKILL.md` and `skill/references/interpreting.md`: the procedure for a coding agent,
+  measure, migrate with the official codemod and guide, prove; shipped in the package.
 
 - Ecosystem probe (`src/ecosystem/`) and `scripts/measure-ecosystem.mjs`: classifies a
   public server as modern, modern-other-revision, modern-no-discover, legacy, auth-required,
@@ -36,5 +46,6 @@ Keep a Changelog, and the project follows Semantic Versioning.
   `@modelcontextprotocol/sdk` 1.30.0 and `fixtures/after` on
   `@modelcontextprotocol/server` 2.0.0, used as the oracle of both commands.
 
-[Unreleased]: https://github.com/AmirK-S/mcp-migrate-delta/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/AmirK-S/mcp-migrate-delta/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/AmirK-S/mcp-migrate-delta/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/AmirK-S/mcp-migrate-delta/releases/tag/v0.1.0

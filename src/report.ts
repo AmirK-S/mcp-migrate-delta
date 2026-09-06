@@ -154,7 +154,7 @@ export interface Finding {
   snippet: string;
   message: string;
   remediation: string;
-  fix: { confidence: FixConfidence; replacement: string } | null;
+  fix: { confidence: FixConfidence; replacement: string; original?: string } | null;
 }
 
 export interface ScanReport {

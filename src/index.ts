@@ -6,6 +6,7 @@ export { RULES } from './rules/index.js';
 export type { PackageManifest, Rule, RuleMatch } from './rules/types.js';
 export { createProjectFromDirectory, createProjectFromFiles, type ScanProject } from './scan/project.js';
 export { scanExitCode, scanProject } from './scan/scanner.js';
+export { applySafeFixes, type AppliedFix, type FixResult, type SkippedFix } from './fix/apply.js';
 export { computeDelta, deltaExitCode } from './verify/diff.js';
 export { formatDelta, formatRules, formatRun, formatScan } from './format.js';
 export { probeUrl, type ProbeResult } from './verify/probe.js';

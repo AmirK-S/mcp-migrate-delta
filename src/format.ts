@@ -1,4 +1,5 @@
 import { relative } from 'node:path';
+import type { FixResult } from './fix/apply.js';
 import type { DeltaReport, Finding, RunReport, ScanReport } from './report.js';
 import type { Rule } from './rules/types.js';
 
@@ -104,6 +105,19 @@ export function formatDelta(delta: DeltaReport): string {
   }
   lines.push('');
   lines.push(s.regressed > 0 ? 'Verdict: regression, exit 1.' : s.scoredFailedAfter < s.scoredFailedBefore ? 'Verdict: strict improvement, no regression, exit 0.' : 'Verdict: no regression, exit 0.');
+  return lines.join('\n');
+}
+
+export function formatFix(result: FixResult, dryRun: boolean): string {
+  const lines: string[] = [];
+  const verb = dryRun ? 'would replace' : 'replaced';
+  if (result.applied.length === 0) lines.push('Nothing safe to replace.');
+  for (const a of result.applied) lines.push(`${a.file}:${a.line}:${a.column}  ${verb} ${a.from} with ${a.to}  (${a.ruleId})`);
+  for (const s of result.skipped) lines.push(`${s.file}:${s.line}:${s.column}  skipped: ${s.reason}`);
+  const breaking = result.remaining.filter((f) => f.severity === 'breaking').length;
+  lines.push('');
+  lines.push(`${result.applied.length} ${verb}, ${result.skipped.length} skipped, ${result.remaining.length} finding(s) left for a human (${breaking} breaking).`);
+  if (result.remaining.length > 0) lines.push('The rest is architectural: run scan for the list, and verify to prove the migration.');
   return lines.join('\n');
 }
 

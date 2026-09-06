@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 import { readFileSync, writeFileSync } from 'node:fs';
 import { Command, InvalidArgumentError } from 'commander';
-import { formatDelta, formatRules, formatRun, formatScan } from './format.js';
+import { applySafeFixes } from './fix/apply.js';
+import { formatDelta, formatFix, formatRules, formatRun, formatScan } from './format.js';
 import { REPORT_VERSION, type RunReport } from './report.js';
 import { RULES } from './rules/index.js';
 import { createProjectFromDirectory } from './scan/project.js';
@@ -41,6 +42,25 @@ program
     if (opts.report) writeFileSync(opts.report, JSON.stringify(report, null, 2) + '\n');
     process.stdout.write((opts.json ? JSON.stringify(report, null, 2) : formatScan(report)) + '\n');
     process.exitCode = scanExitCode(report);
+  });
+
+program
+  .command('fix')
+  .description('Apply the safe mechanical replacements found by scan (today: -32002 to -32602); everything else is listed for a human')
+  .argument('<path>', 'directory or file to fix')
+  .option('--dry-run', 'show what would change without writing')
+  .option('--json', 'print the JSON result instead of text')
+  .action((path: string, opts: { dryRun?: boolean; json?: boolean }) => {
+    let target;
+    try {
+      target = createProjectFromDirectory(path);
+    } catch {
+      throw new Error(`Cannot read ${path}: pass a directory or a single TypeScript, JavaScript or package.json file.`);
+    }
+    const report = scanProject(target, target.root);
+    const result = applySafeFixes(report, target.root, { dryRun: opts.dryRun ?? false });
+    process.stdout.write((opts.json ? JSON.stringify(result, null, 2) : formatFix(result, opts.dryRun ?? false)) + '\n');
+    process.exitCode = result.skipped.length > 0 ? 1 : 0;
   });
 
 program

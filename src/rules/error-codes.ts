@@ -28,7 +28,7 @@ export const errorCodes: Rule = {
     for (const expr of negativeNumericLiterals(file, RESOURCE_NOT_FOUND_OLD)) {
       matches.push(
         matchAt(expr, 'Uses -32002 for resource not found; 2026-07-28 expects -32602.', {
-          fix: { confidence: 'safe', replacement: RESOURCE_NOT_FOUND_NEW },
+          fix: { confidence: 'safe', replacement: RESOURCE_NOT_FOUND_NEW, original: expr.getText() },
         }),
       );
     }

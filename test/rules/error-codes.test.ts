@@ -17,7 +17,7 @@ describe(RULE, () => {
     expect(f.line).toBe(3);
     expect(f.column).toBeGreaterThan(0);
     expect(f.snippet).toContain('-32002');
-    expect(f.fix).toEqual({ confidence: 'safe', replacement: '-32602' });
+    expect(f.fix).toEqual({ confidence: 'safe', replacement: '-32602', original: '-32002' });
   });
 
   it('flags the code inside a hand-built error object', () => {

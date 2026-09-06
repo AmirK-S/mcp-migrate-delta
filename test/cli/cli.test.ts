@@ -73,6 +73,19 @@ describe('mcp-migrate-delta scan', () => {
     expect(r.stdout).toContain('run verify');
   });
 
+  it('fix rewrites the safe replacement and exits 0, dry run leaves the file alone', async () => {
+    const dir = makeV1Project();
+    const dry = await cli(['fix', dir, '--dry-run']);
+    expect(dry.code).toBe(0);
+    expect(dry.stdout).toContain('would replace -32002 with -32602');
+    expect(readFileSync(join(dir, 'src', 'server.ts'), 'utf8')).toContain('-32002');
+    const real = await cli(['fix', dir]);
+    expect(real.code).toBe(0);
+    expect(real.stdout).toContain('replaced -32002 with -32602');
+    expect(real.stdout).toMatch(/left for a human/);
+    expect(readFileSync(join(dir, 'src', 'server.ts'), 'utf8')).toContain('-32602');
+  });
+
   it('exits 2 with a message on a path that does not exist', async () => {
     const r = await cli(['scan', '/nonexistent/path/for/mcp-migrate-delta']);
     expect(r.code).toBe(2);
@@ -90,14 +103,14 @@ describe('mcp-migrate-delta scan', () => {
 });
 
 describe('mcp-migrate-delta rules', () => {
-  it('lists the four rules in text and JSON', async () => {
+  it('lists the five rules in text and JSON', async () => {
     const text = await cli(['rules']);
     expect(text.code).toBe(0);
     expect(text.stdout).toContain('sdk-v1-package');
     expect(text.stdout).toContain('[Minor 6]');
     const json = await cli(['rules', '--json']);
     const rows = JSON.parse(json.stdout);
-    expect(rows.map((r: { id: string }) => r.id)).toEqual(['sdk-v1-package', 'stateful-handshake', 'removed-methods', 'error-codes']);
+    expect(rows.map((r: { id: string }) => r.id)).toEqual(['sdk-v1-package', 'stateful-handshake', 'removed-methods', 'resource-subscriptions', 'error-codes']);
   });
 });
 
