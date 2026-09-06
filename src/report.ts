@@ -37,8 +37,9 @@ export interface CheckSummary {
  * Outcome of one scenario.
  * - `pass`: no check has status FAILURE.
  * - `fail`: at least one check has status FAILURE.
- * - `crashed`: the scenario was expected but the suite wrote no result directory for it
- *   (the suite swallows the exception, counts the scenario as failed, and writes nothing).
+ * - `crashed`: the scenario was expected but the suite wrote no `checks.json` for it. It creates
+ *   the result directory before running the scenario and writes the file after, so an exception
+ *   leaves an empty directory while the terminal summary counts the scenario as failed.
  * - `empty`: the scenario produced no SUCCESS and no FAILURE check at all, so it is
  *   reported green by the suite with a zero denominator.
  */

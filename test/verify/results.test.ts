@@ -136,6 +136,17 @@ describe('readRunResults on synthetic directories', () => {
     expect(run.scenarios.find((s) => s.id === 'a')?.resultDir).toBe('server-a-2026-01-02T00-00-00-000Z');
   });
 
+  it('treats a result directory without checks.json, what a crashed scenario leaves, as crashed', () => {
+    const dir = makeRun({
+      'server-a-2026-01-01T00-00-00-000Z': [{ id: 'x', status: 'SUCCESS' }],
+      'server-c-2026-01-01T00-00-00-000Z': [{ id: 'x', status: 'SUCCESS' }],
+    });
+    mkdirSync(join(dir, 'server-b-2026-01-01T00-00-00-000Z'));
+    const run = readRunResults(dir, req);
+    expect(run.scenarios.find((s) => s.id === 'b')?.outcome).toBe('crashed');
+    expect(run.scenarios.find((s) => s.id === 'b')?.resultDir).toBeUndefined();
+  });
+
   it('reports a scenario the suite ran but the requirements did not list', () => {
     const dir = makeRun({
       'server-a-2026-01-01T00-00-00-000Z': [{ id: 'x', status: 'SUCCESS' }],

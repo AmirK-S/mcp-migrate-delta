@@ -69,7 +69,7 @@ export function formatRun(report: RunReport): string {
   const crashed = report.scenarios.filter((x) => x.outcome === 'crashed');
   if (crashed.length > 0) {
     lines.push('');
-    lines.push(`${crashed.length} scenario(s) left no result directory; the suite crashed on them and would have counted them silently.`);
+    lines.push(`${crashed.length} scenario(s) left no checks.json; the suite crashed on them and would have counted them silently.`);
   }
   if (report.rootCauses.length > 0) {
     lines.push('');

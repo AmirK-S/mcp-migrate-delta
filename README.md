@@ -131,7 +131,7 @@ Failing scored scenarios:
   fail    tools-list (2 failing checks)
   ...
 
-1 scenario(s) left no result directory; the suite crashed on them and would have counted them silently.
+1 scenario(s) left no checks.json; the suite crashed on them and would have counted them silently.
 
 Root causes, by failing checks:
     47  Bad Request: server not initialized  [34 scenario(s)]
@@ -189,8 +189,9 @@ The suite is built for humans and for CI badges, not for programs. Observed on
 - **Nothing is written without `-o`.** The README of the suite says results land in
   `results/`; they do only with `--output-dir`. `verify` always passes it, reads the
   `checks.json` files back, and keeps them when you pass `--output-dir` yourself.
-- **A scenario the suite crashes on writes no result directory** but is counted as failed in
-  the terminal summary. `verify` lines the directories up against the
+- **A scenario the suite crashes on leaves an empty result directory, without `checks.json`,**
+  while the terminal summary counts it as failed. Counting directories looks complete;
+  counting files does not. `verify` lines the `checks.json` files up against the
   `requirements/<revision>.yaml` file the package ships and reports the missing ones as
   `crashed`.
 - **A scenario can be green with zero checks executed.** Reported as `empty`.

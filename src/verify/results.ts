@@ -37,7 +37,8 @@ export function parseResultDirName(name: string): { leg: string; scenario: strin
 /**
  * Reads every `server-<scenario>-<timestamp>/checks.json` under `outputDir` and lines the
  * scenarios up against the requirements file. A scenario the requirements expect but the
- * suite wrote nothing for is reported as `crashed`, never dropped.
+ * suite wrote no `checks.json` for (an empty directory is what a crash leaves) is reported as
+ * `crashed`, never dropped.
  */
 export function readRunResults(outputDir: string, requirements: Requirements): RunResults {
   const found = new Map<string, { dir: string; timestamp: string; checks: CheckSummary[] }>();
