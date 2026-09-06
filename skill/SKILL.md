@@ -3,6 +3,7 @@ name: mcp-migrate-delta
 description: Measure what MCP revision 2026-07-28 breaks in a TypeScript MCP server, and prove a migration off @modelcontextprotocol/sdk 1.x with the official conformance suite run before and after. Use when a user migrates an MCP server to @modelcontextprotocol/server 2.x, asks whether a migration actually worked, needs a regression gate on an MCP migration, or has just run @modelcontextprotocol/codemod.
 license: Apache-2.0
 metadata:
+  version: "0.2.1"
   pinned_conformance: "@modelcontextprotocol/conformance@0.2.0-alpha.11"
   pinned_revision: "2026-07-28"
   repository: https://github.com/AmirK-S/mcp-migrate-delta
@@ -44,8 +45,8 @@ the result as `before.json`. Do this before the first edit: a baseline taken aft
 rewrite proves nothing. Expect almost every scored scenario to fail on a 2025-11-25 server;
 the "Root causes" block will say why in one line. That is the starting point, not a bug.
 
-If the command exits 2 with "No HTTP server answers", the server is not running or the URL is
-wrong; fix that first. Never treat it as a measurement.
+If the tool refuses to measure because nothing answers at the URL, the server is not running
+or the URL is wrong; fix that first. Never treat that message as a measurement.
 
 ### 3. Migrate with the official tooling
 
@@ -72,10 +73,11 @@ Start the migrated server, then:
 npx mcp-migrate-delta verify --url http://localhost:<port>/mcp --baseline before.json --report delta.json
 ```
 
-Exit 0 means no check of a scored scenario went from SUCCESS to FAILURE. Exit 1 means at
-least one did: the delta lists each regression by scenario and check, and the report has the
-error message of the failing check. Fix the regression, restart the server, run this step
-again. Do not touch `before.json`.
+Read the exit code the command prints and what the tool says it means. The delta lists each
+regression by scenario and check. The error message of a failing check lives in a run report,
+not in a delta report, so add a second pass without `--baseline` when you need it:
+`npx mcp-migrate-delta verify --url http://localhost:<port>/mcp --report after.json`. Fix the
+regression, restart the server, run this step again. Do not touch `before.json`.
 
 ### 5. Read the delta
 

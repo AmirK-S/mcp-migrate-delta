@@ -7,8 +7,8 @@ apart. Read the following before calling a result good or bad.
 ## What is a regression
 
 A check that was SUCCESS in the baseline and is FAILURE now, in a scored scenario. Nothing
-else. The tool exits 1 on the first one. A check that was FAILURE and is still FAILURE is
-"still failing": not a regression, but not done either.
+else. One is enough for the tool to fail; the tool's own output says so. A check that was
+FAILURE and is still FAILURE is "still failing": not a regression, but not done either.
 
 ## What looks like a regression and is not
 
@@ -17,8 +17,9 @@ else. The tool exits 1 on the first one. A check that was FAILURE and is still F
   results, resource subscriptions become a listen stream). The suite then runs checks that did
   not exist before and stops running some that did. They are listed as `added` and `removed`,
   never as regressions.
-- **Status moves that are neither SUCCESS nor FAILURE.** WARNING, SKIPPED and INFO moving
-  around are listed as `changed`. They do not affect the exit code.
+- **Status moves that are neither a fix nor a regression.** Any move other than FAILURE to
+  SUCCESS or SUCCESS to FAILURE is listed as `changed`. The tool lists them without counting
+  them as regressions.
 - **A not scored scenario getting worse.** The tasks extension scenarios and the pending ones
   run but never count. They appear under "(not scored)" in the scenario list.
 
@@ -28,6 +29,9 @@ else. The tool exits 1 on the first one. A check that was FAILURE and is still F
   is not a pass.
 - **A scenario the suite crashed on.** The suite counts it as failed in its own summary but
   writes no `checks.json`; the tool labels it `crashed` and counts it as failing.
+- **A check that left SUCCESS without reaching FAILURE.** SUCCESS to WARNING and SUCCESS to
+  SKIPPED are listed as `changed`, alongside the harmless moves. Read the `changed` list of
+  the delta report, not only the counts.
 - **A scenario that passes for the wrong reason.** Some checks expect a JSON-RPC error and
   are satisfied by any error, including the one a 2025-11-25 transport returns to every
   stateless request. One such scenario passes on an unmigrated server. Read the baseline's

@@ -5,6 +5,19 @@ Keep a Changelog, and the project follows Semantic Versioning.
 
 ## [Unreleased]
 
+## [0.2.1] - 2026-09-06
+
+### Fixed
+
+- `fix` handles files that start with a UTF-8 BOM; a finding on their first line was
+  skipped with a misleading reason.
+- `resource-subscriptions` only fires on the `subscribe: true` flag inside a `capabilities`
+  object, and its remediation names the 2.x notify facade and says that a server still
+  serving 2025-era clients keeps the old handlers on purpose.
+- The agent skill no longer restates exit codes or claims the delta report carries error
+  messages; it says where they are.
+- README: the `scan` example is the complete real output again.
+
 ## [0.2.0] - 2026-09-06
 
 ### Added
@@ -16,7 +29,6 @@ Keep a Changelog, and the project follows Semantic Versioning.
   human. Findings now carry `fix.original`.
 - `skill/SKILL.md` and `skill/references/interpreting.md`: the procedure for a coding agent,
   measure, migrate with the official codemod and guide, prove; shipped in the package.
-
 - Ecosystem probe (`src/ecosystem/`) and `scripts/measure-ecosystem.mjs`: classifies a
   public server as modern, modern-other-revision, modern-no-discover, legacy, auth-required,
   rate-limited, unreachable or other with at most two POST requests (`server/discover` for
@@ -46,6 +58,7 @@ Keep a Changelog, and the project follows Semantic Versioning.
   `@modelcontextprotocol/sdk` 1.30.0 and `fixtures/after` on
   `@modelcontextprotocol/server` 2.0.0, used as the oracle of both commands.
 
-[Unreleased]: https://github.com/AmirK-S/mcp-migrate-delta/compare/v0.2.0...HEAD
+[Unreleased]: https://github.com/AmirK-S/mcp-migrate-delta/compare/v0.2.1...HEAD
+[0.2.1]: https://github.com/AmirK-S/mcp-migrate-delta/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/AmirK-S/mcp-migrate-delta/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/AmirK-S/mcp-migrate-delta/releases/tag/v0.1.0

@@ -82,7 +82,7 @@ PORT=3002 node fixtures/after/src/server.mjs &
 
 ```
 $ mcp-migrate-delta scan fixtures/before
-mcp-migrate-delta 0.2.0 scan of fixtures/before
+mcp-migrate-delta 0.2.1 scan of fixtures/before
 Revision 2025-11-25 to 2026-07-28, 2 file(s), 5 rule(s)
 
 package.json
@@ -90,24 +90,44 @@ package.json
       dependencies pins @modelcontextprotocol/sdk at "1.30.0", a 1.x line that cannot serve revision 2026-07-28.
       "@modelcontextprotocol/sdk": "1.30.0",
 src/server.mjs
+  60:30  breaking resource-subscriptions [Major 4]
+      Advertises the resources.subscribe capability; 2026-07-28 negotiates subscriptions through subscriptions/listen instead.
+      resources: { subscribe: true, listChanged: true },
   74:37  breaking removed-methods [Major 5]
       Handles logging/setLevel through SetLevelRequestSchema; the method is removed in 2026-07-28.
       server.server.setRequestHandler(SetLevelRequestSchema, async request => {
   80:37  breaking removed-methods [Major 5]
       Handles ping through PingRequestSchema; the method is removed in 2026-07-28.
       server.server.setRequestHandler(PingRequestSchema, async () => ({}));
+  85:37  breaking resource-subscriptions [Major 4]
+      Handles resources/subscribe through SubscribeRequestSchema; the method is replaced by subscriptions/listen in 2026-07-28.
+      server.server.setRequestHandler(SubscribeRequestSchema, async request => {
   88:32  breaking error-codes [Minor 6]
+      Uses -32002 for resource not found; 2026-07-28 expects -32602.
+      throw new McpError(-32002, `Resource not found: ${uri}`, { uri });
+  fix (safe): -32602
+  94:37  breaking resource-subscriptions [Major 4]
+      Handles resources/unsubscribe through UnsubscribeRequestSchema; the method is replaced by subscriptions/listen in 2026-07-28.
+      server.server.setRequestHandler(UnsubscribeRequestSchema, async request => {
+  97:32  breaking error-codes [Minor 6]
       Uses -32002 for resource not found; 2026-07-28 expects -32602.
       throw new McpError(-32002, `Resource not found: ${uri}`, { uri });
   fix (safe): -32602
   103:5  breaking stateful-handshake [Major 1, Major 2]
       Hooks oninitialized; the initialize handshake no longer exists in 2026-07-28.
       server.server.oninitialized = () => {
-  ...
+  513:35  breaking stateful-handshake [Major 1, Major 2]
+      Reads or writes the Mcp-Session-Id header, which 2026-07-28 removes.
+      const sessionId = req.headers['mcp-session-id'];
+  532:10  breaking stateful-handshake [Major 1, Major 2]
+      Handles InitializeRequestSchema; the initialize handshake no longer exists in 2026-07-28.
+      if (!InitializeRequestSchema.safeParse(req.body).success) {
   542:9  breaking stateful-handshake [Major 1, Major 2]
       Transport mints a session id with sessionIdGenerator; 2026-07-28 has no protocol sessions.
       sessionIdGenerator: () => randomUUID(),
-  ...
+  561:35  breaking stateful-handshake [Major 1, Major 2]
+      Reads or writes the Mcp-Session-Id header, which 2026-07-28 removes.
+      const sessionId = req.headers['mcp-session-id'];
 
 13 breaking, 0 advisory
 2 finding(s) have a safe mechanical replacement, shown inline.
@@ -115,7 +135,8 @@ src/server.mjs
 
 Exit code `1`. The same command on `fixtures/after` prints `No finding` and exits `0`.
 `mcp-migrate-delta fix fixtures/before` would apply the two safe replacements and list the
-eleven other findings for a human; `--dry-run` shows the same without writing.
+eleven other findings for a human; `--dry-run` shows the same without writing, and `--json`
+prints the result as data.
 
 ### `verify` on the server before migration
 
@@ -209,7 +230,7 @@ The suite is built for humans and for CI badges, not for programs. Observed on
 | `sdk-v1-package` | breaking | Major 2, Major 3 | A manifest depending on `@modelcontextprotocol/sdk` 1.x. The 1.x line serves `2025-11-25` at most: no `server/discover`, `2026-07-28` rejected as unsupported. Every other rule presupposes this one. |
 | `stateful-handshake` | breaking | Major 1, Major 2 | `sessionIdGenerator` on a Streamable HTTP transport, the `Mcp-Session-Id` header, `InitializeRequestSchema`, `InitializedNotificationSchema`, `oninitialized`, and `initialize` or `notifications/initialized` used as a method name. |
 | `removed-methods` | breaking | Major 5 | `SetLevelRequestSchema`, `PingRequestSchema`, `RootsListChangedNotificationSchema`, `.ping()` on a server or client, and `ping`, `logging/setLevel`, `notifications/roots/list_changed` used as method names. |
-| `resource-subscriptions` | breaking | Major 4 | `SubscribeRequestSchema`, `UnsubscribeRequestSchema`, `resources/subscribe` or `resources/unsubscribe` used as method names, and the `resources: { subscribe: true }` capability flag. Replaced by `subscriptions/listen`; no mechanical rewrite. |
+| `resource-subscriptions` | breaking | Major 4 | `SubscribeRequestSchema`, `UnsubscribeRequestSchema`, `resources/subscribe` or `resources/unsubscribe` used as method names, and the `resources: { subscribe: true }` capability flag. Replaced by `subscriptions/listen`; no mechanical rewrite. On a 2.x code base that still serves 2025-era clients these findings are expected: the SDK keeps that path. |
 | `error-codes` | breaking | Minor 6 | `-32002` for resource not found, with a safe replacement by `-32602`. Also flags `-32042` (URL elicitation required, `2025-11-25` only) as advisory: the multi round-trip pattern replaces it, there is no mechanical rewrite. |
 
 What is deliberately **not** a rule: the renumbering `-32001` to `-32020`, `-32003` to
@@ -312,7 +333,7 @@ the SDK's documentation. `skill/references/interpreting.md` says how to read a d
 | `scan` | no breaking finding | at least one breaking finding | usage error, unreadable path |
 | `verify` | no scored scenario failed or crashed | at least one did | usage error, no HTTP server at the URL, unknown revision, unreadable baseline |
 | `verify --baseline` | no regression | at least one check of a scored scenario regressed | as above, or the baseline is not a run report |
-| `fix` | every safe replacement applied, or nothing to do | at least one replacement skipped because the file changed since the scan | usage error, unreadable path |
+| `fix` | every safe replacement applied, or nothing to do | at least one replacement was skipped because the text at the reported position did not match | usage error, unreadable path |
 
 ## JSON reports
 
@@ -340,6 +361,13 @@ process.exitCode = deltaExitCode(delta);
   suite's `server` command tests.
 - Five rules, not sixteen. The other entries of the changelog are either handled by the
   SDK once the package changes, or detectable only on hand-built envelopes.
+
+## Issues
+
+Issues are answered within seven days. Bug reports with a reproduction are fixed; feature
+requests are read and answered, without a commitment to implement them. The tool is bound to
+one protocol revision and one pinned suite version; the section at the top of this file says
+what makes it obsolete.
 
 ## Development
 

@@ -1,6 +1,6 @@
 {
   "name": "mcp-migrate-delta",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Measure what MCP revision 2026-07-28 breaks in a 2025-11-25 TypeScript server, and prove the migration with the official conformance suite before and after.",
   "keywords": [
     "mcp",

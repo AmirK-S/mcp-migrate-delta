@@ -42,6 +42,7 @@ describe(RULE, () => {
       const stream = await client.listen({ resourceSubscriptions: ['test://x'] });
       emitter.subscribe('event', () => {});
       const plan = { subscribe: 'newsletter' };
+      const pubsubConfig = { resources: { subscribe: true, retention: 7 } };
     `;
     expect(findingsOf(RULE, { 'src/client.ts': code })).toEqual([]);
   });

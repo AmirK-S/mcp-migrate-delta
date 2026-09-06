@@ -42,7 +42,11 @@ export function applySafeFixes(report: ScanReport, root: string, options: { dryR
 
   for (const [file, findings] of byFile) {
     const path = join(root, file);
-    const lines = readFileSync(path, 'utf8').split('\n');
+    const raw = readFileSync(path, 'utf8');
+    // ts-morph strips a leading BOM before counting columns; keep it out of the offsets and
+    // put it back on write, or every finding on line 1 would be off by one character.
+    const bom = raw.startsWith('\uFEFF') ? '\uFEFF' : '';
+    const lines = raw.slice(bom.length).split('\n');
     // Apply from the end of each line backwards so earlier columns stay valid.
     const ordered = [...findings].sort((a, b) => b.line - a.line || b.column - a.column);
     let touched = false;
@@ -59,7 +63,7 @@ export function applySafeFixes(report: ScanReport, root: string, options: { dryR
       result.applied.push(entry);
       touched = true;
     }
-    if (touched && !options.dryRun) writeFileSync(path, lines.join('\n'));
+    if (touched && !options.dryRun) writeFileSync(path, bom + lines.join('\n'));
   }
 
   result.applied.sort((a, b) => a.file.localeCompare(b.file) || a.line - b.line || a.column - b.column);

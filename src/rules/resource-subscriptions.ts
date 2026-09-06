@@ -22,7 +22,7 @@ export const resourceSubscriptions: Rule = {
   description:
     'Revision 2026-07-28 removes resources/subscribe, resources/unsubscribe and the HTTP GET endpoint. Clients opt into change notifications through a single subscriptions/listen stream; the server acknowledges and tags notifications with io.modelcontextprotocol/subscriptionId.',
   remediation:
-    'Delete the subscribe and unsubscribe handlers and the resources.subscribe capability flag. In @modelcontextprotocol/server 2.x, subscriptions/listen is served by createMcpHandler; emit resource changes through the server notify API and let clients opt in with resourceSubscriptions on listen. There is no mechanical rewrite: what the old handlers stored per session has no equivalent.',
+    'Drop the subscribe and unsubscribe handlers and the resources.subscribe capability flag from the modern path. In @modelcontextprotocol/server 2.x nothing is registered: createMcpHandler and serveStdio serve subscriptions/listen themselves, createMcpHandler returns a notify facade (handler.notify.resourceUpdated(uri), toolsChanged, promptsChanged, resourcesChanged) and clients opt in through the resourceSubscriptions field of the listen filter. A server that still answers 2025-era clients keeps the old handlers on purpose: the SDK leaves that path unchanged. There is no mechanical rewrite: what the old handlers stored per session has no equivalent.',
   checkSource(file: SourceFile): RuleMatch[] {
     const matches: RuleMatch[] = [];
 
@@ -42,6 +42,10 @@ export const resourceSubscriptions: Rule = {
       if (!initializer || initializer.getKind() !== SyntaxKind.TrueKeyword) continue;
       const resources = prop.getParent().getParent();
       if (!Node.isPropertyAssignment(resources) || resources.getName() !== 'resources') continue;
+      // Only inside a capabilities object: `resources: { subscribe: true }` is an ordinary
+      // shape outside MCP, and a rule that fires on it is a false positive by construction.
+      const capabilities = resources.getParent().getParent();
+      if (!Node.isPropertyAssignment(capabilities) || capabilities.getName() !== 'capabilities') continue;
       matches.push(matchAt(prop, 'Advertises the resources.subscribe capability; 2026-07-28 negotiates subscriptions through subscriptions/listen instead.'));
     }
 

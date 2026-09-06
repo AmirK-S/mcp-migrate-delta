@@ -53,6 +53,16 @@ describe('applySafeFixes', () => {
     expect(second.applied).toEqual([]);
   });
 
+  it('handles a file that starts with a UTF-8 BOM, whose first line carries a finding', () => {
+    const dir = project();
+    writeFileSync(join(dir, 'src', 'b.ts'), '\uFEFFconst code = -32002;\nconst two = -32002;\n');
+    const result = applySafeFixes(scanProject(createProjectFromDirectory(dir), dir), dir, { dryRun: false });
+    expect(result.skipped).toEqual([]);
+    const after = readFileSync(join(dir, 'src', 'b.ts'), 'utf8');
+    expect(after.startsWith('\uFEFF')).toBe(true);
+    expect(after).not.toContain('-32002');
+  });
+
   it('refuses a finding whose text no longer matches the file, instead of corrupting it', () => {
     const dir = project();
     const report = scanProject(createProjectFromDirectory(dir), dir);
