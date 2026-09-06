@@ -31,6 +31,25 @@ describe('probeUrl', () => {
     await expect(probeUrl(url, 2_000)).resolves.toEqual({ reachable: true, status: 404 });
   });
 
+  it('falls back to a server/discover POST when the server drops GET connections', async () => {
+    const picky = createServer((req, res) => {
+      if (req.method === 'GET') {
+        req.socket.destroy();
+        return;
+      }
+      res.statusCode = 405;
+      res.end('{}');
+    });
+    await new Promise<void>((resolve) => picky.listen(0, '127.0.0.1', resolve));
+    const address = picky.address();
+    if (!address || typeof address === 'string') throw new Error('no port');
+    try {
+      await expect(probeUrl(`http://127.0.0.1:${address.port}/mcp`, 2_000)).resolves.toEqual({ reachable: true, status: 405 });
+    } finally {
+      await new Promise<void>((resolve) => picky.close(() => resolve()));
+    }
+  });
+
   it('reports a closed port as unreachable with the cause', async () => {
     const result = await probeUrl('http://127.0.0.1:1/mcp', 2_000);
     expect(result.reachable).toBe(false);

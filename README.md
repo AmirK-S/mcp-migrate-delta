@@ -15,9 +15,10 @@ run for real, before and after.
 
 ## Why
 
-Six static scanners for this migration already exist. None of them proves anything: a
-scanner that verifies its own rewrite with the regular expressions that produced it verifies
-nothing. The proof that a migration worked is the official suite, `npx
+Static scanners for this migration already exist (on PyPI `mcp-migrate` and `mcp-codemod`,
+on npm `mcp-stateless-migrator` and `efaimo`, plus agent skills on GitHub). None of them
+proves anything: a scanner that verifies its own rewrite with the regular expressions that
+produced it verifies nothing. The proof that a migration worked is the official suite, `npx
 @modelcontextprotocol/conformance server --requirements 2026-07-28`, run against the server
 before and after, and the difference between the two runs. That difference is what this
 tool computes, check by check, with an exit code that fails on any regression.

@@ -9,12 +9,26 @@ export type ProbeResult = { reachable: true; status: number } | { reachable: fal
  * is precisely the server we want to measure.
  */
 export async function probeUrl(url: string, timeoutMs: number): Promise<ProbeResult> {
+  const get = await attempt(url, timeoutMs, { method: 'GET', headers: { accept: 'application/json, text/event-stream' } });
+  if (get.reachable) return get;
+  // A server may close the connection on GET rather than answer it (2026-07-28 has no GET
+  // endpoint). Retry with server/discover, the request the revision designates as a probe.
+  const post = await attempt(url, timeoutMs, {
+    method: 'POST',
+    headers: {
+      accept: 'application/json, text/event-stream',
+      'content-type': 'application/json',
+      'mcp-method': 'server/discover',
+      'mcp-protocol-version': '2026-07-28',
+    },
+    body: JSON.stringify({ jsonrpc: '2.0', id: 0, method: 'server/discover', params: {} }),
+  });
+  return post.reachable ? post : get;
+}
+
+async function attempt(url: string, timeoutMs: number, init: RequestInit): Promise<ProbeResult> {
   try {
-    const response = await fetch(url, {
-      method: 'GET',
-      headers: { accept: 'application/json, text/event-stream' },
-      signal: AbortSignal.timeout(timeoutMs),
-    });
+    const response = await fetch(url, { ...init, signal: AbortSignal.timeout(timeoutMs) });
     // Drain so the socket is released; the body is irrelevant.
     await response.arrayBuffer().catch(() => undefined);
     return { reachable: true, status: response.status };
