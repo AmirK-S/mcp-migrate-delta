@@ -60,7 +60,7 @@ describe('probeServer', () => {
       type: 'application/json',
       body: '{"jsonrpc":"2.0","id":1,"result":{"supportedVersions":["2026-07-28"],"resultType":"complete"}}',
     }));
-    const probe = await probeServer(url, { timeoutMs: 2_000 });
+    const probe = await probeServer(url, { timeoutMs: 2_000, pauseMs: 0 });
     expect(probe.verdict).toBe('modern');
     expect(seen.map((s) => s.method)).toEqual(['server/discover']);
     expect(seen[0]?.headers['user-agent']).toBe(DEFAULT_USER_AGENT);
@@ -74,7 +74,7 @@ describe('probeServer', () => {
         ? { status: 400, type: 'application/json', body: '{"jsonrpc":"2.0","error":{"code":-32000,"message":"Bad Request: Unsupported protocol version: 2026-07-28"},"id":null}' }
         : { status: 200, type: 'text/event-stream', body: 'event: message\ndata: {"jsonrpc":"2.0","id":1,"result":{"protocolVersion":"2025-11-25","capabilities":{},"serverInfo":{"name":"old","version":"1"}}}\n\n' },
     );
-    const probe = await probeServer(url, { timeoutMs: 2_000 });
+    const probe = await probeServer(url, { timeoutMs: 2_000, pauseMs: 0 });
     expect(probe.verdict).toBe('legacy');
     expect(probe.protocolVersions).toEqual(['2025-11-25']);
     expect(probe.serverName).toBe('old');
@@ -82,15 +82,28 @@ describe('probeServer', () => {
     expect(probe.initialize?.status).toBe(200);
   });
 
+  it('waits the configured pause between the two requests of one server', async () => {
+    const stamps: number[] = [];
+    const { url } = await serve((s) => {
+      stamps.push(Date.now());
+      return s.method === 'server/discover'
+        ? { status: 400, type: 'application/json', body: '{"jsonrpc":"2.0","error":{"code":-32000,"message":"nope"},"id":null}' }
+        : { status: 200, type: 'application/json', body: '{"jsonrpc":"2.0","id":1,"result":{"protocolVersion":"2025-11-25","capabilities":{},"serverInfo":{"name":"x","version":"1"}}}' };
+    });
+    await probeServer(url, { timeoutMs: 2_000, pauseMs: 300 });
+    expect(stamps).toHaveLength(2);
+    expect(stamps[1]! - stamps[0]!).toBeGreaterThanOrEqual(280);
+  });
+
   it('stops after a 401 without sending initialize', async () => {
     const { url, seen } = await serve(() => ({ status: 401, type: 'text/plain', body: 'unauthorized' }));
-    const probe = await probeServer(url, { timeoutMs: 2_000 });
+    const probe = await probeServer(url, { timeoutMs: 2_000, pauseMs: 0 });
     expect(probe.verdict).toBe('auth-required');
     expect(seen).toHaveLength(1);
   });
 
   it('reports a closed port as unreachable after one attempt', async () => {
-    const probe = await probeServer('http://127.0.0.1:1/mcp', { timeoutMs: 2_000 });
+    const probe = await probeServer('http://127.0.0.1:1/mcp', { timeoutMs: 2_000, pauseMs: 0 });
     expect(probe.verdict).toBe('unreachable');
     expect(probe.discover.status).toBeNull();
   });
@@ -107,7 +120,7 @@ describe('probeServer', () => {
     const address = server.address();
     if (!address || typeof address === 'string') throw new Error('no port');
     const started = Date.now();
-    const probe = await probeServer(`http://127.0.0.1:${address.port}/mcp`, { timeoutMs: 800 });
+    const probe = await probeServer(`http://127.0.0.1:${address.port}/mcp`, { timeoutMs: 800, pauseMs: 0 });
     expect(Date.now() - started).toBeLessThan(4_000);
     expect(probe.verdict).toBe('other');
   }, 10_000);

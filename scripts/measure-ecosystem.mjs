@@ -27,9 +27,10 @@ const date = new Date().toISOString().slice(0, 10);
 const results = [];
 for (const entry of selection) {
   process.stderr.write(`${entry.name} ${entry.url} ... `);
-  const probe = await probeServer(entry.url, { timeoutMs: 5_000 });
+  const probe = await probeServer(entry.url, { timeoutMs: 15_000, pauseMs: 5_000 });
   process.stderr.write(`${probe.verdict} (${probe.durationMs} ms)\n`);
   results.push({ ...entry, ...probe });
+  await new Promise((r) => setTimeout(r, 5_000));
 }
 
 const counts = {};
@@ -41,7 +42,7 @@ const report = {
   tool: { name: 'mcp-migrate-delta', version: TOOL_VERSION },
   date,
   method:
-    'Per server, at most two POST requests: server/discover with the 2026-07-28 headers and _meta, then initialize (2025-11-25) when discover did not settle the verdict. No tools/call, one pass, no retry, 5 s timeout, sequential.',
+    'Per server, at most two POST requests: server/discover with the 2026-07-28 headers and _meta, then initialize (2025-11-25) when discover did not settle the verdict. No tools/call, no notifications/initialized, one pass, no retry (429 included), 15 s timeout, 5 s pause between requests and between servers, no Origin header, no credentials, identifying User-Agent, body kept to 4 KiB. A verdict records what a server declares, not that it conforms.',
   selectionFile: selectionPath,
   total: results.length,
   counts,

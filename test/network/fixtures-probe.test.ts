@@ -31,14 +31,14 @@ afterAll(() => {
 
 describe('probeServer on the bundled fixtures', () => {
   it('classifies fixtures/after as modern, from server/discover alone', async () => {
-    const probe = await probeServer(await startFixture('after', 39312));
+    const probe = await probeServer(await startFixture('after', 39312), { pauseMs: 0 });
     expect(probe.verdict).toBe('modern');
     expect(probe.protocolVersions).toContain('2026-07-28');
     expect(probe.initialize).toBeUndefined();
   }, 30_000);
 
   it('classifies fixtures/before as legacy 2025-11-25, from discover then initialize', async () => {
-    const probe = await probeServer(await startFixture('before', 39311));
+    const probe = await probeServer(await startFixture('before', 39311), { pauseMs: 0 });
     expect(probe.verdict).toBe('legacy');
     expect(probe.protocolVersions).toEqual(['2025-11-25']);
     expect(probe.discover.status).toBe(400);

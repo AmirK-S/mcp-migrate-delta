@@ -1,11 +1,12 @@
 import { describe, expect, it } from 'vitest';
 import { classify, parseJsonRpcBody, type HttpOutcome } from '../../src/ecosystem/classify.js';
 
-const ok = (status: number, body: string, contentType = 'application/json'): HttpOutcome => ({
+const ok = (status: number, body: string, contentType = 'application/json', headers: Record<string, string> = {}): HttpOutcome => ({
   kind: 'response',
   status,
   contentType,
   body,
+  headers,
 });
 const dead = (error: string): HttpOutcome => ({ kind: 'error', error });
 
@@ -56,9 +57,41 @@ describe('classify', () => {
     expect(v.verdict).toBe('legacy');
   });
 
-  it('reports 401 and 403 as auth-required without trying to read further', () => {
+  it('reports 401, and 403 with WWW-Authenticate, as auth-required without reading further', () => {
     expect(classify({ discover: ok(401, '', 'text/plain') }).verdict).toBe('auth-required');
-    expect(classify({ discover: ok(403, '{"error":"forbidden"}') }).verdict).toBe('auth-required');
+    expect(classify({ discover: ok(403, '{"error":"forbidden"}', 'application/json', { 'www-authenticate': 'Bearer' }) }).verdict).toBe('auth-required');
+  });
+
+  it('does not read a bare 403 as auth, since the transport also uses 403 for origin refusal', () => {
+    const v = classify({ discover: ok(403, 'forbidden', 'text/plain'), initialize: ok(403, 'forbidden', 'text/plain') });
+    expect(v.verdict).toBe('other');
+    expect(v.detail).toMatch(/403/);
+  });
+
+  it('reads a -32022 rejection listing 2026-07-28 as modern, and one without as modern-other-revision', () => {
+    const modern = '{"jsonrpc":"2.0","id":1,"error":{"code":-32022,"message":"Unsupported protocol version","data":{"supported":["2026-07-28"]}}}';
+    expect(classify({ discover: ok(400, modern) })).toMatchObject({ verdict: 'modern', protocolVersions: ['2026-07-28'] });
+    const other = '{"jsonrpc":"2.0","id":1,"error":{"code":-32022,"message":"Unsupported protocol version","data":{"supported":["2027-01-01"]}}}';
+    expect(classify({ discover: ok(400, other) })).toMatchObject({ verdict: 'modern-other-revision', protocolVersions: ['2027-01-01'] });
+  });
+
+  it('reads supportedVersions without 2026-07-28 as modern-other-revision', () => {
+    const body = '{"jsonrpc":"2.0","id":1,"result":{"supportedVersions":["2027-03-01"],"resultType":"complete"}}';
+    expect(classify({ discover: ok(200, body) }).verdict).toBe('modern-other-revision');
+  });
+
+  it('counts a 404 with a JSON-RPC -32601 body as modern-no-discover, a distinct class', () => {
+    const body = '{"jsonrpc":"2.0","id":1,"error":{"code":-32601,"message":"Method not found"}}';
+    const v = classify({ discover: ok(404, body) });
+    expect(v.verdict).toBe('modern-no-discover');
+  });
+
+  it('reports 429 as rate-limited and never as a conformance statement', () => {
+    expect(classify({ discover: ok(429, '', 'text/plain') }).verdict).toBe('rate-limited');
+  });
+
+  it('reports 5xx on discover as unreachable', () => {
+    expect(classify({ discover: ok(503, 'down', 'text/plain') }).verdict).toBe('unreachable');
   });
 
   it('reports a connection failure or timeout as unreachable', () => {

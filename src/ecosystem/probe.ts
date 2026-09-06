@@ -3,6 +3,8 @@ import { classify, type Classification, type HttpOutcome } from './classify.js';
 
 export interface ProbeOptions {
   timeoutMs?: number;
+  /** Pause between the two requests of one server. */
+  pauseMs?: number;
   userAgent?: string;
   /** Sent on both requests, for example an identifying contact. */
   extraHeaders?: Record<string, string>;
@@ -17,7 +19,8 @@ export interface ServerProbe extends Classification {
 }
 
 export const DEFAULT_USER_AGENT = `mcp-migrate-delta/${TOOL_VERSION} (+https://github.com/AmirK-S/mcp-migrate-delta)`;
-const DEFAULT_TIMEOUT_MS = 5_000;
+const DEFAULT_TIMEOUT_MS = 15_000;
+const DEFAULT_PAUSE_MS = 5_000;
 const MODERN = '2026-07-28';
 const LEGACY = '2025-11-25';
 
@@ -80,6 +83,7 @@ export async function probeServer(url: string, options: ProbeOptions = {}): Prom
   let initialize: HttpOutcome | undefined;
   const settled = classify({ discover });
   if (settled.verdict === 'other') {
+    await new Promise((r) => setTimeout(r, options.pauseMs ?? DEFAULT_PAUSE_MS));
     initialize = await send(url, initializeRequest(), common, timeoutMs);
   }
   const classification = initialize ? classify({ discover, initialize }) : settled;
@@ -116,10 +120,12 @@ async function send(
     return { kind: 'error', error: `${e.name === 'TimeoutError' ? 'timeout' : e.message}${cause}` };
   }
   const contentType = response.headers.get('content-type') ?? '';
+  const headers: Record<string, string> = {};
+  response.headers.forEach((value, key) => (headers[key] = value));
   // Headers arrived, so the server answered: whatever happens to the body, this is a response.
   // Read at most the first chunk of an SSE stream, then drop the connection.
-  const body = await readSome(response, timeoutMs).catch(() => '');
-  return { kind: 'response', status: response.status, contentType, body };
+  const body = (await readSome(response, timeoutMs).catch(() => '')).slice(0, 4096);
+  return { kind: 'response', status: response.status, contentType, body, headers };
 }
 
 async function readSome(response: Response, timeoutMs: number): Promise<string> {
