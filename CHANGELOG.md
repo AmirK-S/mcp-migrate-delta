@@ -5,6 +5,14 @@ Keep a Changelog, and the project follows Semantic Versioning.
 
 ## [Unreleased]
 
+### Added
+
+- Ecosystem probe (`src/ecosystem/`) and `scripts/measure-ecosystem.mjs`: classifies a
+  public server as modern, legacy, auth-required, unreachable or other with at most two
+  POST requests (`server/discover` for 2026-07-28, then `initialize` for 2025-11-25),
+  never a `tools/call`, no retry, identifying User-Agent.
+- `probeUrl` falls back to a `server/discover` POST when a server drops GET connections.
+
 ## [0.1.0] - 2026-09-05
 
 ### Added
