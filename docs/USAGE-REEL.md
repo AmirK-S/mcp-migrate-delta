@@ -1,7 +1,7 @@
-# Usage réel
+_Field log, kept in the maintainer's working language. Not user documentation: the reference
+for what the tool does is the README, and the measurement below is summarised there in English._
 
-> Real-use log of the tool outside its own fixtures, kept in French. The measurement it describes
-> is summarised in English in the README, section "Ecosystem measurement".
+# Usage réel
 
 Trace des exécutions de `mcp-migrate-delta` sur des cas qui ne sont pas ses propres fixtures.
 Une entrée par campagne : commande, date, ce qui s'est passé, ce qui a cassé, ce qui a été corrigé.
@@ -33,6 +33,10 @@ requêtes, un est injoignable. Détail par serveur dans `docs/ecosystem/2026-09-
   reçus font une réponse, quoi qu'il arrive au corps.
 - Un `403` nu est aussi le refus d'un `Origin` invalide dans le transport ; il n'est plus lu comme un
   refus d'authentification sans `WWW-Authenticate`. La sonde n'envoie aucun `Origin`.
+- La règle de remplacement d'un serveur injoignable par un rang de réserve, prévue au cadrage,
+  a été abandonnée avant la mesure : remplacer biaiserait l'échantillon vers les serveurs vivants
+  et effacerait un fait mesuré, une entrée active du registre pointant un domaine qui ne résout
+  plus. Les trente rangs tirés sont conservés tels quels.
 - Un serveur a répondu `402` à `server/discover` puis a négocié `initialize` : classé `legacy`, le
   statut est conservé dans le rapport.
 - Onze serveurs répondent à `server/discover` par `-32601 Method not found` avec un HTTP 200 :

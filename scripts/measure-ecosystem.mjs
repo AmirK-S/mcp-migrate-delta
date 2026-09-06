@@ -3,8 +3,9 @@
 //
 // Reads a selection file (JSON array of { name, version, url, updatedAt, source }), sends at
 // most two POST requests per server (server/discover for 2026-07-28, then initialize for
-// 2025-11-25 if needed), never a tools/call, one pass, no retry, five seconds per request,
-// sequentially, with a User-Agent that names this project. Writes a JSON report and a
+// 2025-11-25 if needed), never a tools/call, one pass, no retry, a fifteen second timeout
+// and a five second pause between requests and between servers, sequentially, with a
+// User-Agent that names this project. Writes a JSON report and a
 // Markdown table next to it. Run `npm run build` first.
 //
 //   node scripts/measure-ecosystem.mjs <selection.json> <out-dir>

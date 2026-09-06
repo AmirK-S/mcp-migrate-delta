@@ -255,21 +255,24 @@ Measured on 06 September 2026, from the official registry, with the probe in
 `src/ecosystem/` and the script `scripts/measure-ecosystem.mjs`. Raw results, the selection
 file and the method are in `docs/ecosystem/`.
 
-**Sample.** The registry (`/v0.1/servers?version=latest`) listed 27 410 servers that day,
-15 465 with a remote endpoint. Filters: active, latest version, an `https` Streamable HTTP
+**Sample.** The registry (`/v0.1/servers?version=latest`) listed 27,410 servers that day,
+15,465 with a remote endpoint. Filters: active, latest version, an `https` Streamable HTTP
 remote without declared headers or template variables, no localhost or tunnel host, no
 authentication word in the description, published more than seven days earlier. That leaves
-10 027 candidates. Recency was rejected as a selection rule because the most recently updated
-entries were a temporary tunnel and three servers of one publisher; the thirty are instead one
-server per namespace, host and URL, ordered by the SHA-256 of the registry name. The rule is
-deterministic and replayable as the corpus grows.
+10,027 candidates, and 6,023 once deduplicated to one server per namespace, host and URL.
+Recency was rejected as a selection rule because the most recently updated entries were a
+temporary tunnel and three servers of one publisher; the thirty are drawn from those 6,023,
+ordered by the SHA-256 of the registry name. The rule is deterministic and replayable as the
+corpus grows. An unreachable server is not replaced by a reserve entry: replacing it would
+bias the sample towards live servers and erase a measured fact.
 
 **Probe.** At most two POST requests per server: `server/discover` on the 2026-07-28 wire
 (the three SEP-2243 headers and per-request `_meta`), then, only if that did not settle the
-verdict, a 2025-11-25 `initialize` that is never followed. Never a `tools/call`, no
-credentials, no `Origin` header, no retry (a 429 counts as such), 15 s timeout, 5 s pause
-between requests and between servers, an identifying User-Agent, bodies kept to 4 KiB. The
-whole pass sent at most 60 requests.
+verdict, a 2025-11-25 `initialize` that is never followed by a `notifications/initialized`.
+Never a `tools/call`, no credentials, no `Origin` header, no retry, not even on a 429, 15 s
+timeout, 5 s pause between requests and between servers, an identifying User-Agent, bodies
+read to 64 KiB at most and kept to 4 KiB. The pass sent 52 requests, 60 at most by
+construction.
 
 **Result, 30 servers.**
 
@@ -285,7 +288,8 @@ Of the 19 endpoints that could be read, none declared the current revision, fort
 it shipped; the 7 behind authentication cannot be read and say nothing either way. A verdict
 records what a server declares, not that it conforms: a server declaring `2026-07-28` would
 still have to pass the suite. The response bodies are kept, truncated, in the JSON report so
-every verdict can be checked by hand. The trace of the run is in `docs/USAGE-REEL.md`.
+every verdict can be checked by hand. A dated log of every run against servers that are not
+this project's own fixtures is kept in `docs/USAGE-REEL.md`.
 
 Registry data is published under CC0 and the registry's terms allow downstream processing;
 this project is not affiliated with the registry or the Model Context Protocol project.

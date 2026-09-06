@@ -144,10 +144,15 @@ async function readSome(response: Response, timeoutMs: number): Promise<string> 
   const deadline = Date.now() + timeoutMs;
   try {
     while (Date.now() < deadline && text.length < 64_000) {
+      let timer: ReturnType<typeof setTimeout> | undefined;
       const { value, done } = await Promise.race([
         reader.read(),
-        new Promise<{ value: undefined; done: true }>((resolve) => setTimeout(() => resolve({ value: undefined, done: true }), Math.max(1, deadline - Date.now()))),
-      ]);
+        new Promise<{ value: undefined; done: true }>((resolve) => {
+          timer = setTimeout(() => resolve({ value: undefined, done: true }), Math.max(1, deadline - Date.now()));
+        }),
+      ]).finally(() => {
+        if (timer) clearTimeout(timer);
+      });
       if (done) break;
       text += decoder.decode(value, { stream: true });
       if (/\n\n/.test(text) || text.trimEnd().endsWith('}')) break;
