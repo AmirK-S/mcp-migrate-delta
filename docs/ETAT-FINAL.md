@@ -62,14 +62,15 @@ Aucune issue ouverte au 06/09/2026. Ce qui ne sera pas fait, et pourquoi :
   `other` avec son statut, ce qui reste lisible dans le rapport.
 - **Renommer `skill/` en `skills/mcp-migrate-delta/`** : non fait ; le paquet publie `skill/` et
   le chemin est cité par le README et la compétence.
+- **Entrée au registre MCP officiel** : sans objet, `mcp-migrate-delta` est un outil en ligne de
+  commande et non un serveur MCP ; le registre ne liste que des serveurs.
 
 ## Livrables de l'annexe
 
 - Usage réel tracé : `docs/USAGE-REEL.md`, mesure sur trente serveurs publics du registre.
-- Ligne de CV : `docs/LIGNE-CV.md`, en trois langues.
-- Post : `docs/POST-LINKEDIN.md`, à relire par le contrôleur du dossier de prospection avant
-  toute publication.
-- Fiche d'apprentissage : `docs/FICHE-APPRENTISSAGE.md`, avec la démonstration en cinq minutes.
+- La ligne de CV, le post et la fiche de préparation orale existent mais ne sont pas des documents
+  de ce dépôt : ils vivent dans le dossier de travail de l'auteur, hors dépôt public, comme pour
+  les projets voisins.
 
 ## Traces publiques
 

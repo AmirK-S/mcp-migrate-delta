@@ -5,3 +5,6 @@ coverage/
 .DS_Store
 .mcp-migrate-delta/
 *.log
+docs/FICHE-*.md
+docs/POST-*.md
+docs/LIGNE-CV*.md
