@@ -3,7 +3,7 @@ name: mcp-migrate-delta
 description: Measure what MCP revision 2026-07-28 breaks in a TypeScript MCP server, and prove a migration off @modelcontextprotocol/sdk 1.x with the official conformance suite run before and after. Use when a user migrates an MCP server to @modelcontextprotocol/server 2.x, asks whether a migration actually worked, needs a regression gate on an MCP migration, or has just run @modelcontextprotocol/codemod.
 license: Apache-2.0
 metadata:
-  version: "0.2.1"
+  version: "0.2.2"
   pinned_conformance: "@modelcontextprotocol/conformance@0.2.0-alpha.11"
   pinned_revision: "2026-07-28"
   repository: https://github.com/AmirK-S/mcp-migrate-delta

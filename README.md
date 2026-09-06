@@ -82,7 +82,7 @@ PORT=3002 node fixtures/after/src/server.mjs &
 
 ```
 $ mcp-migrate-delta scan fixtures/before
-mcp-migrate-delta 0.2.1 scan of fixtures/before
+mcp-migrate-delta 0.2.2 scan of fixtures/before
 Revision 2025-11-25 to 2026-07-28, 2 file(s), 5 rule(s)
 
 package.json

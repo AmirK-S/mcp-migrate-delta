@@ -63,6 +63,18 @@ describe('applySafeFixes', () => {
     expect(after).not.toContain('-32002');
   });
 
+  it('never writes outside the scanned root, whatever a report says', () => {
+    const dir = project();
+    const report = scanProject(createProjectFromDirectory(dir), dir);
+    const outside = mkdtempSync(join(tmpdir(), 'mmd-outside-'));
+    writeFileSync(join(outside, 'victim.ts'), 'const code = -32002;\n');
+    const forged = { ...report, findings: report.findings.map((f) => ({ ...f, file: join('..', '..', outside.split('/').slice(-2).join('/'), 'victim.ts') })) };
+    const result = applySafeFixes(forged, dir, { dryRun: false });
+    expect(result.applied).toEqual([]);
+    expect(result.skipped.every((s) => /outside/.test(s.reason))).toBe(true);
+    expect(readFileSync(join(outside, 'victim.ts'), 'utf8')).toContain('-32002');
+  });
+
   it('refuses a finding whose text no longer matches the file, instead of corrupting it', () => {
     const dir = project();
     const report = scanProject(createProjectFromDirectory(dir), dir);

@@ -1,5 +1,5 @@
 import { readFileSync, writeFileSync } from 'node:fs';
-import { join } from 'node:path';
+import { join, relative, resolve, sep } from 'node:path';
 import type { Finding, ScanReport } from '../report.js';
 
 export interface AppliedFix {
@@ -16,6 +16,7 @@ export interface SkippedFix extends AppliedFix {
 }
 
 export interface FixResult {
+  dryRun: boolean;
   applied: AppliedFix[];
   skipped: SkippedFix[];
   /** Findings that carry no safe fix and remain for a human. */
@@ -28,7 +29,7 @@ export interface FixResult {
  * finding rather than editing blindly. Findings with no safe fix are returned untouched.
  */
 export function applySafeFixes(report: ScanReport, root: string, options: { dryRun: boolean }): FixResult {
-  const result: FixResult = { applied: [], skipped: [], remaining: [] };
+  const result: FixResult = { dryRun: options.dryRun, applied: [], skipped: [], remaining: [] };
   const byFile = new Map<string, Finding[]>();
   for (const finding of report.findings) {
     if (finding.fix?.confidence !== 'safe' || !finding.fix.original) {
@@ -41,7 +42,15 @@ export function applySafeFixes(report: ScanReport, root: string, options: { dryR
   }
 
   for (const [file, findings] of byFile) {
-    const path = join(root, file);
+    const path = resolve(root, file);
+    const rel = relative(resolve(root), path);
+    if (rel.startsWith('..') || rel.split(sep).includes('..')) {
+      // A report handed to the API could name a path outside the scanned root; never write there.
+      for (const f of findings) {
+        result.skipped.push({ file, line: f.line, column: f.column, from: f.fix!.original!, to: f.fix!.replacement, ruleId: f.ruleId, reason: `path ${file} is outside ${root}` });
+      }
+      continue;
+    }
     const raw = readFileSync(path, 'utf8');
     // ts-morph strips a leading BOM before counting columns; keep it out of the offsets and
     // put it back on write, or every finding on line 1 would be off by one character.

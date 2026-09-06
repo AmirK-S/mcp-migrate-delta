@@ -5,6 +5,14 @@ Keep a Changelog, and the project follows Semantic Versioning.
 
 ## [Unreleased]
 
+## [0.2.2] - 2026-09-06
+
+### Fixed
+
+- `applySafeFixes` refuses to write outside the scanned root, whatever a report handed to
+  the API says. The CLI was never affected: it builds its own report.
+- `fix --json` carries `dryRun` so a dry run cannot be mistaken for a write.
+
 ## [0.2.1] - 2026-09-06
 
 ### Fixed
@@ -58,7 +66,8 @@ Keep a Changelog, and the project follows Semantic Versioning.
   `@modelcontextprotocol/sdk` 1.30.0 and `fixtures/after` on
   `@modelcontextprotocol/server` 2.0.0, used as the oracle of both commands.
 
-[Unreleased]: https://github.com/AmirK-S/mcp-migrate-delta/compare/v0.2.1...HEAD
+[Unreleased]: https://github.com/AmirK-S/mcp-migrate-delta/compare/v0.2.2...HEAD
+[0.2.2]: https://github.com/AmirK-S/mcp-migrate-delta/compare/v0.2.1...v0.2.2
 [0.2.1]: https://github.com/AmirK-S/mcp-migrate-delta/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/AmirK-S/mcp-migrate-delta/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/AmirK-S/mcp-migrate-delta/releases/tag/v0.1.0
