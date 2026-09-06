@@ -8,7 +8,9 @@ export type HttpOutcome =
   | { kind: 'error'; error: string };
 
 /**
- * - `modern`: declares 2026-07-28, in `supportedVersions` or in the `data.supported` of a -32022.
+ * - `modern`: declares 2026-07-28, in `supportedVersions`, in the `data.supported` of a -32022, or
+ *   by rejecting the probe with -32020 or -32021, codes that only the 2026-07-28 wire defines
+ *   (the probe is then malformed for that server, and the verdict says so).
  * - `modern-other-revision`: declares versions on the modern wire, none of them 2026-07-28.
  * - `modern-no-discover`: answers 404 with a JSON-RPC -32601, the modern shape for an unknown
  *   method, on a method the revision says servers MUST implement.
@@ -98,6 +100,13 @@ export function classify(outcomes: { discover: HttpOutcome; initialize?: HttpOut
       detail: `server/discover rejected with -32022 listing data.supported`,
     };
   }
+  if (code === -32020 || code === -32021) {
+    return {
+      verdict: 'modern',
+      protocolVersions: [],
+      detail: `server/discover rejected with ${code}, a code only the 2026-07-28 wire defines; the probe was not accepted as sent`,
+    };
+  }
   if (discover.status === 404 && code === -32601) {
     return {
       verdict: 'modern-no-discover',
@@ -122,7 +131,7 @@ export function classify(outcomes: { discover: HttpOutcome; initialize?: HttpOut
       const info = init?.result?.['serverInfo'];
       const name = info && typeof info === 'object' ? (info as { name?: unknown }).name : undefined;
       return {
-        verdict: 'legacy',
+        verdict: negotiated >= MODERN ? 'modern' : 'legacy',
         protocolVersions: [negotiated],
         ...(typeof name === 'string' ? { serverName: name } : {}),
         detail: `server/discover HTTP ${discover.status}${describeError(discovered)}; initialize negotiated ${negotiated}`,

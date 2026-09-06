@@ -82,6 +82,29 @@ describe('probeServer', () => {
     expect(probe.initialize?.status).toBe(200);
   });
 
+  it('never sends Origin, Authorization or a cookie, and only the two read-only methods', async () => {
+    const { url, seen } = await serve((s) =>
+      s.method === 'server/discover'
+        ? { status: 400, type: 'application/json', body: '{"jsonrpc":"2.0","error":{"code":-32000,"message":"nope"},"id":null}' }
+        : { status: 200, type: 'application/json', body: '{"jsonrpc":"2.0","id":1,"result":{"protocolVersion":"2025-11-25","capabilities":{},"serverInfo":{"name":"x","version":"1"}}}' },
+    );
+    await probeServer(url, { timeoutMs: 2_000, pauseMs: 0 });
+    expect(seen.map((s) => s.method)).toEqual(['server/discover', 'initialize']);
+    for (const s of seen) {
+      expect(s.headers['origin']).toBeUndefined();
+      expect(s.headers['authorization']).toBeUndefined();
+      expect(s.headers['cookie']).toBeUndefined();
+      expect(s.headers['mcp-session-id']).toBeUndefined();
+    }
+  });
+
+  it('keeps an excerpt of each response body so a verdict can be checked by hand', async () => {
+    const { url } = await serve(() => ({ status: 404, type: 'application/json', body: '{"error":"not here"}' }));
+    const probe = await probeServer(url, { timeoutMs: 2_000, pauseMs: 0 });
+    expect(probe.discover.bodyExcerpt).toContain('not here');
+    expect(probe.initialize?.bodyExcerpt).toContain('not here');
+  });
+
   it('waits the configured pause between the two requests of one server', async () => {
     const stamps: number[] = [];
     const { url } = await serve((s) => {

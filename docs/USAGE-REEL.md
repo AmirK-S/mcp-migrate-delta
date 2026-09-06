@@ -1,5 +1,8 @@
 # Usage réel
 
+> Real-use log of the tool outside its own fixtures, kept in French. The measurement it describes
+> is summarised in English in the README, section "Ecosystem measurement".
+
 Trace des exécutions de `mcp-migrate-delta` sur des cas qui ne sont pas ses propres fixtures.
 Une entrée par campagne : commande, date, ce qui s'est passé, ce qui a cassé, ce qui a été corrigé.
 
@@ -12,8 +15,9 @@ npm run build
 node scripts/measure-ecosystem.mjs docs/ecosystem/selection-2026-09-06.json docs/ecosystem
 ```
 
-**Ce qui s'est passé.** Trente serveurs sondés en 137 s de requêtes, plus les pauses de
-courtoisie. Aucun ne déclare `2026-07-28`. Dix-neuf négocient une révision antérieure sur
+**Ce qui s'est passé.** Trente serveurs sondés : 136,5 s cumulées par serveur, dont 110 s de pauses
+internes entre les deux requêtes (22 serveurs ont eu besoin de la seconde), soit 27 s de réseau, plus
+30 pauses de 5 s entre serveurs. Aucun ne déclare `2026-07-28`. Dix-neuf négocient une révision antérieure sur
 `initialize` (dix en `2025-11-25`, cinq en `2025-06-18`, trois en `2024-11-05`, une en
 `2025-03-26`), sept exigent une authentification, trois répondent 404 avec un corps JSON aux deux
 requêtes, un est injoignable. Détail par serveur dans `docs/ecosystem/2026-09-06.md` et

@@ -86,6 +86,22 @@ describe('classify', () => {
     expect(v.verdict).toBe('modern-no-discover');
   });
 
+  it('reads a -32020 or -32021 rejection as modern: only a 2026-07-28 server emits those codes', () => {
+    const mismatch = '{"jsonrpc":"2.0","id":1,"error":{"code":-32020,"message":"Mcp-Method header does not match"}}';
+    expect(classify({ discover: ok(400, mismatch) })).toMatchObject({ verdict: 'modern', protocolVersions: [] });
+    const capability = '{"jsonrpc":"2.0","id":1,"error":{"code":-32021,"message":"Missing required client capability","data":{"requiredCapabilities":{"sampling":{}}}}}';
+    const v = classify({ discover: ok(400, capability) });
+    expect(v.verdict).toBe('modern');
+    expect(v.detail).toMatch(/-32021/);
+  });
+
+  it('reads an initialize that negotiates 2026-07-28 as modern, not legacy', () => {
+    const init = '{"jsonrpc":"2.0","id":1,"result":{"protocolVersion":"2026-07-28","capabilities":{},"serverInfo":{"name":"odd","version":"1"}}}';
+    const v = classify({ discover: ok(200, '{"jsonrpc":"2.0","id":1,"result":{}}'), initialize: ok(200, init) });
+    expect(v.verdict).toBe('modern');
+    expect(v.protocolVersions).toEqual(['2026-07-28']);
+  });
+
   it('reports 429 as rate-limited and never as a conformance statement', () => {
     expect(classify({ discover: ok(429, '', 'text/plain') }).verdict).toBe('rate-limited');
   });

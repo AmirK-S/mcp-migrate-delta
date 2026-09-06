@@ -281,11 +281,17 @@ whole pass sent at most 60 requests.
 | other | 3 | HTTP 404 with a JSON body on both requests; not an MCP endpoint at that URL that day |
 | unreachable | 1 | no HTTP answer |
 
-Of the 23 endpoints that answered MCP or refused for authorization, none declared the
-current revision, forty days after it shipped. A verdict records what a server declares,
-not that it conforms: a server declaring `2026-07-28` would still have to pass the suite.
-Server names and URLs are in `docs/ecosystem/2026-09-06.md`; no judgement on their authors
-is implied, and any operator who wants an endpoint removed from the list can open an issue.
+Of the 19 endpoints that could be read, none declared the current revision, forty days after
+it shipped; the 7 behind authentication cannot be read and say nothing either way. A verdict
+records what a server declares, not that it conforms: a server declaring `2026-07-28` would
+still have to pass the suite. The response bodies are kept, truncated, in the JSON report so
+every verdict can be checked by hand. The trace of the run is in `docs/USAGE-REEL.md`.
+
+Registry data is published under CC0 and the registry's terms allow downstream processing;
+this project is not affiliated with the registry or the Model Context Protocol project.
+Server names and URLs are in `docs/ecosystem/2026-09-06.md`; no judgement on their authors is
+implied. The probe's User-Agent names this repository, and any operator who wants an endpoint
+left out of future runs can open an issue here.
 
 ## Exit codes
 

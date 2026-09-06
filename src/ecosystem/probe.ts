@@ -14,11 +14,19 @@ export interface ServerProbe extends Classification {
   url: string;
   probedAt: string;
   durationMs: number;
-  discover: { status: number | null; contentType?: string };
-  initialize?: { status: number | null; contentType?: string };
+  discover: ResponseSummary;
+  initialize?: ResponseSummary;
 }
 
-export const DEFAULT_USER_AGENT = `mcp-migrate-delta/${TOOL_VERSION} (+https://github.com/AmirK-S/mcp-migrate-delta)`;
+export interface ResponseSummary {
+  status: number | null;
+  contentType?: string;
+  /** First 300 characters of the body, so a verdict can be checked by hand. */
+  bodyExcerpt?: string;
+  error?: string;
+}
+
+export const DEFAULT_USER_AGENT = `mcp-migrate-delta/${TOOL_VERSION} (+https://github.com/AmirK-S/mcp-migrate-delta; protocol revision survey; opt out by opening an issue)`;
 const DEFAULT_TIMEOUT_MS = 15_000;
 const DEFAULT_PAUSE_MS = 5_000;
 const MODERN = '2026-07-28';
@@ -150,6 +158,10 @@ async function readSome(response: Response, timeoutMs: number): Promise<string> 
   return text;
 }
 
-function summarise(outcome: HttpOutcome): { status: number | null; contentType?: string } {
-  return outcome.kind === 'response' ? { status: outcome.status, contentType: outcome.contentType } : { status: null };
+function summarise(outcome: HttpOutcome): ResponseSummary {
+  if (outcome.kind !== 'response') return { status: null, error: outcome.error };
+  const summary: ResponseSummary = { status: outcome.status, contentType: outcome.contentType };
+  const excerpt = outcome.body.slice(0, 300);
+  if (excerpt) summary.bodyExcerpt = excerpt;
+  return summary;
 }
